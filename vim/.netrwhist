@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='/home/felix/Documents/Projects'
+let g:netrw_dirhist_7='/home/felix/Documents'
+let g:netrw_dirhist_6='/home/felix'
+let g:netrw_dirhist_5='/home/felix/Dropbox/Documents/workspace/scripts/uri'
+let g:netrw_dirhist_4='/home/felix/.vim/bundle/vim-airline/autoload/airline'
+let g:netrw_dirhist_3='/home/felix/.vim/bundle/vim-airline/autoload'
+let g:netrw_dirhist_2='/home/felix'
+let g:netrw_dirhist_1='/home/felix/.vim'
+let g:netrw_dirhist_0='/home/felix/.vim'
+let g:netrw_dirhist_9='/home/felix/.vim/bundle/vim-airline/autoload/airline'

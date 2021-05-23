@@ -1,0 +1,109 @@
+# .bash_scripts [Saulo G. Felix]
+
+function organize {
+    for file in ./* ; do
+        mv -v "$file" "$(echo $file|sed -e 's/\([A-Z]\)/-\L\1/g' -e 's/^.\/-//' -e 's/ /-/g')"
+    done
+}
+
+function col {
+	  awk -v col=$1 '{print $col}'
+}
+
+function skip {
+    n=$(($1 + 1))
+    cut -d' ' -f$n-
+}
+
+# cb - copy to clipboard
+# A shortcut function that simplifies usage of xclip.
+# Accepts input from either stdin (pipe), or params.
+cb() {
+  local _scs_col="\e[01;34m"; local _wrn_col='\e[01;31m'; local _trn_col='\e[01;33m'
+  # Check that xclip is installed.
+  if ! type xclip > /dev/null 2>&1; then
+    echo -e "$_wrn_col""You must have the 'xclip' program installed.\e[0m"
+  # Check user is not root (root doesn't have access to user xorg server)
+  elif [[ "$USER" == "root" ]]; then
+    echo -e "$_wrn_col""Must be regular user (not root) to copy a file to the clipboard.\e[0m"
+  else
+    # If no tty, data should be available on stdin
+    if ! [[ "$( tty )" == /dev/* ]]; then
+      input="$(< /dev/stdin)"
+    # Else, fetch input from params
+    else
+      input="$*"
+    fi
+    if [ -z "$input" ]; then  # If no input, print usage message.
+      echo "Copies a string to the clipboard."
+      echo "Usage: cb <string>"
+      echo "       echo <string> | cb"
+    else
+      # Copy input to clipboard
+      echo -n "$input" | xclip -selection c
+      # Truncate text for status
+      if [ ${#input} -gt 80 ]; then input="$(echo $input | cut -c1-80)$_trn_col...\e[0m"; fi
+      # Print status.
+      echo -e "$_scs_col""Copied to clipboard:\e[0m $input"
+    fi
+  fi
+}
+
+cbf() {
+	cat "$@" | cb
+}
+
+# fzf-scripts for git repositories
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+fzf-down() {
+  fzf --multi --inline-info --height 50% -1 --layout reverse  --border none --bind ctrl-/:toggle-preview "$@"
+}
+
+_gf() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf-down -m --ansi --nth 2..,.. --height 100% --preview-window right,border \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+_gb() {
+  is_in_git_repo || return
+  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window up,5,border-horizontal \
+    --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
+  sed 's/^..//' | cut -d' ' -f1 |
+  sed 's#^remotes/##'
+}
+
+_gt() {
+  is_in_git_repo || return
+  git tag --sort -version:refname |
+  fzf-down --multi \
+    --preview 'git show --color=always {}'
+}
+
+_gh() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf-down --ansi --no-sort --height 70% --reverse --multi --preview-window up,10,border-horizontal \
+ 	--bind 'ctrl-y:execute-silent(grep -o "[a-f0-9]\{7,\}" <<< {} | xclip -i -selection clipboard)+abort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' | grep -o "[a-f0-9]\{7,\}"
+}
+
+_gr() {
+  is_in_git_repo || return
+  git remote -v | awk '{print $1 "\t" $2}' | uniq |
+  fzf-down --tac \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1}' |
+  cut -d$'\t' -f1
+}
+
+_gs() {
+  is_in_git_repo || return
+  git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
+  cut -d: -f1
+}
