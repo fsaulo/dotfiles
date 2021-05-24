@@ -145,8 +145,8 @@ Plugin 'tpope/vim-obsession'
 Plugin 'preservim/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-Plugin 'jmcantrell/vim-virtualenv'
-Plugin 'airblade/vim-gitgutter'
+" Plugin 'jmcantrell/vim-virtualenv'
+" Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 
@@ -184,7 +184,7 @@ let g:airline_symbols.maxlinenr = ' ㏑'
 let g:airline_symbols.paste = 'PASTE'
 let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = ' ?'
-let g:airline_symbols.whitespace = 'Ξ'
+let g:airline_symbols.whitespace = '☲'
 let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = '☠ '
 let g:airline_symbols.dirty = ' •'
@@ -277,10 +277,15 @@ hi LineNr cterm=bold ctermfg=220
 hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
 hi ErrorMsg cterm=bold ctermfg=203 ctermbg=NONE
 hi Ignore cterm=NONE ctermfg=darkgrey ctermbg=NONE
+hi Pmenu ctermfg=233 cterm=NONE ctermbg=133
+hi PmenuSel cterm=bold ctermfg=244 ctermbg=0
+hi PmenuSbar ctermbg=240
+hi PmenuThumb ctermbg=244
 
 hi! link SignColumn LineNr
 hi! link DiffAdd ErrorMsg
 hi! link ColorColumn ErrorMsg
+hi! link VertSplit StatusLine
 
 " gitgutter
 hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
@@ -293,11 +298,11 @@ hi! link GitGutterChangeLine GitGutterChange
 hi! link GitGutterDeleteLine GitGutterDelete
 hi! link GitGutterChangeDeleteLine GitGutterChangeDelete
 hi! link GitGutterAddIntraLine GitGutterAdd
-hi! link GitGutterDeleteIntraLine GitGutterDelete
 hi! link GitGutterAddInvisible GitGutterAdd
 hi! link GitGutterChangeInvisible GitGutterChange
 hi! link GitGutterDeleteInvisible GitGutterDelete
 hi! link GitGutterChangeDeleteInvisible GitGutterChageDelete
+hi! link GitGutterDeleteIntraLine GitGutterDelete
 
 " standoutTo activate italic font type
 let &t_ZH="\e[3m"
