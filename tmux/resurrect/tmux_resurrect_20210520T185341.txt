@@ -1,9 +1,0 @@
-pane	0	1	:[vim-editor]	1	:*	0	:/home/felix	1	vimx	:vimx
-pane	0	2	:[shell]	0	:	0	:/home/felix	1	bash	:
-pane	0	3	:[ranger]	0	:	0	:/home/felix	1	python3	:/usr/bin/python3 -s /usr/bin/ranger
-pane	0	4	:[ssh]	0	:-	0	:/home/felix	1	bash	:
-window	0	1	1	:*	be3d,159x34,0,0,0
-window	0	2	0	:	be3e,159x34,0,0,1
-window	0	3	0	:	be43,159x34,0,0,6
-window	0	4	0	:-	be44,159x34,0,0,7
-state	0	
