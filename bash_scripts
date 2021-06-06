@@ -53,7 +53,9 @@ cbf() {
 	cat "$@" | cb
 }
 
-# fzf-scripts for git repositories
+
+# FZF scritps adapted to handle git repositories
+# See `bashrc` to remember how to use it
 is_in_git_repo() {
   git rev-parse HEAD > /dev/null 2>&1
 }
@@ -106,4 +108,75 @@ _gs() {
   is_in_git_repo || return
   git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
   cut -d: -f1
+}
+
+add_diary() {
+	FILE_EMPTY=$(nb search --utility rg ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep "Match")
+	if [ -z "$FILE_EMPTY" ]; then
+		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
+	else
+		nb edit ${DIARY_PATH}${FILE_NAME} 
+	fi
+}
+
+nbdiary() {
+	DIARY_PATH=home:diary/
+	FILE_NAME="`date +"%Y%m%d"`.md"
+	TODAYS_DATE=`date`
+	if [ $# -eq 0 ]; then
+		nb peek ${DIARY_PATH}
+	else
+		if [[ "$1" == "edit" ]] || [[ "$1" == "e" ]] || [[ "$1" == "add" ]]; then
+			if [[ ! "$2" == "" ]]; then
+				nb edit ${DIARY_PATH}"$2"
+			else
+				add_diary
+			fi
+		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+			nb list ${DIARY_PATH}
+		else
+			DATE=$(date --date="$*" +"%Y%m%d" 2>/dev/null)
+			TODAY=$(date +"%Y%m%d")
+			if [[ ${DATE} == ${TODAY} ]]; then
+				add_diary
+			elif [ ! -z ${DATE} ]; then
+				FILE_NAME=${DATE}.md
+				nb edit ${DIARY_PATH}${FILE_NAME}
+			fi
+		fi
+	fi
+}
+
+nbwiki() {
+	WIKI="wiki:verbetes/"
+	VIGIA="Wiki_vigia.md"
+	TRADUZ="Wiki_traduz.md"
+	MENORES="Wiki_menores.md"
+	EXPANDE="Wiki_expande.md"
+	if [ $# -eq 0 ]; then
+		nb peek wiki:
+	elif [ "$1" == "artigos" ]; then
+		if  [ "$2" == "" ]; then
+			nb peek wiki:artigos/
+		elif [[ "$2" == "list" ]] || [[ "$2" == "ls" ]]; then
+			nb list --filenames wiki:artigos/
+		else
+			echo "Command not found"
+		fi
+	else
+		while [ ! -z "$1" ]; do
+			if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
+				nb edit ${WIKI}${EXPANDE}
+			elif [[ "$1" == "menores" ]] || [[ "$1" == "menor" ]] || [[ "$1" == "m" ]]; then
+				nb edit ${WIKI}${MENORES}
+			elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
+				nb edit ${WIKI}${TRADUZ}
+			elif [[ "$1" == "vigia" ]] || [[ "$1" == "v" ]] || [[ "$1" == "watch" ]]; then
+				nb edit ${WIKI}${VIGIA}
+			elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+				nb list wiki:
+			fi
+		shift
+		done
+	fi
 }
