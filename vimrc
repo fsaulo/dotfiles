@@ -16,7 +16,7 @@ set autoread
 set mouse=a
 set updatetime=100
 
-" With a map leader it's possible to do extra key combinations
+" Map leader key
 let mapleader = ","
 
 " Fast saving and quitting
@@ -62,7 +62,8 @@ inoremap <buffer> <Up> <C-O>gk
 inoremap <buffer> <Down> <C-O>gj
 
 " Toggle/clear highlight search
-nnoremap <silent><C-k> :set hlsearch!<CR>
+nnoremap <silent><C-k>k :set hlsearch!<CR>
+
 nnoremap <silent><leader><Space> :noh<CR><CR>
 
 " Edit/reload vimrc configuration file
@@ -129,7 +130,6 @@ let $BASH_ENV = "~/.vim_bash_env"
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'djoshea/vim-autoread'
 Plugin 'xuxinx/vim-tabline'
@@ -145,8 +145,10 @@ Plugin 'tpope/vim-obsession'
 Plugin 'preservim/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-" Plugin 'jmcantrell/vim-virtualenv'
-" Plugin 'airblade/vim-gitgutter'
+Plugin 'jmcantrell/vim-virtualenv'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'houtsnip/vim-emacscommandline'
+Plugin 'fsaulo/vim-airline'
 
 call vundle#end()
 
@@ -193,12 +195,12 @@ let g:airline_symbols.dirty = ' •'
 let g:vim_markdown_folding_disabled = 1
 let g:vim_markdown_no_default_key_mappings = 1
 let g:vim_markdown_conceal_code_blocks = 0
-let g:tex_conceal = ""
 let g:vim_markdown_math = 1
 let g:vim_markdown_conceal = 0
 let g:vim_markdown_emphasis_multiline = 0
 let g:vim_markdown_frontmatter = 0
 let g:vim_markdown_strikethrough = 0
+let g:tex_conceal = ""
 
 let g:fzf_layout = {'down': '30%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-]':'vsplit'}
@@ -222,11 +224,11 @@ let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
 
 " Fzf mapping
 nnoremap <C-F> :Files<CR>
-nnoremap <C-M>b :Buffers<CR>
-nnoremap <C-M>m :Marks<CR>
+nnoremap <C-J> :Buffers<CR>
+nnoremap <C-K> :Marks<CR>
 nnoremap <C-M>w :Windows<CR>
-nnoremap <C-M>h :History:<CR>
-nnoremap <C-M>c :Commits<CR>
+nnoremap <C-H> :History:<CR>
+nnoremap <C-L> :Commits<CR>
 
 " Checklist toggle for markdown files
 nnoremap <leader>c  :ChecklistToggleCheckbox<CR>
@@ -239,16 +241,18 @@ nnoremap <leader>\ :Shell<Space>
 " Preview commands to compile and execute C singular file programs
 nnoremap <F5> :Shell gcc -o cout.lo -std=c99 -lm %<Space>
 nnoremap <F6> :Shell xclip -o -selection clipboard \| ./cout.lo<Space>
-nnoremap <F7> :Shell rm -f *.lo *.out<CR>
+nnoremap <F7> :Shell rm -f *.lo *.out<CR><C-W>c<CR>
+nnoremap <F8> :Shell cat % \| clipboard<CR><C-W>c<CR>
 
 " Map tagbar
-nnoremap <leader>t :TagbarToggle<CR>
+nnoremap <silent><leader>t :TagbarToggle<CR>
 
 " Gitgutter defaults
 let g:gitgutter_enabled = 0
 
 " Mag gitgutter toggle
 nnoremap <silent><leader>ht :GitGutterToggle<CR>
+nnoremap <silent><C-n> :call NumberToggle()<CR>
 
 " theme
 " -----
@@ -270,8 +274,9 @@ hi Search ctermbg=darkblue ctermfg=white cterm=bold
 hi Visual ctermbg=darkblue ctermfg=yellow cterm=bold
 hi TabLineFill cterm=NONE
 hi StatusLine cterm=bold
-hi htmlItalic ctermfg=grey
+hi htmlItalic ctermfg=darkgrey
 hi htmlBold cterm=bold ctermfg=darkblue
+hi htmlH1 cterm=bold ctermfg=203
 hi Todo cterm=bold ctermfg=cyan ctermbg=NONE
 hi LineNr cterm=bold ctermfg=220
 hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
@@ -281,15 +286,18 @@ hi Pmenu ctermfg=233 cterm=NONE ctermbg=133
 hi PmenuSel cterm=bold ctermfg=244 ctermbg=0
 hi PmenuSbar ctermbg=240
 hi PmenuThumb ctermbg=244
+hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
+hi DiffChange ctermbg=232 ctermfg=212 cterm=reverse
+hi DiffDelete ctermbg=232 ctermfg=203 cterm=reverse
+hi DiffText ctermbg=255 ctermfg=166 cterm=reverse,bold
 
 hi! link SignColumn LineNr
-hi! link DiffAdd ErrorMsg
 hi! link ColorColumn ErrorMsg
 hi! link VertSplit StatusLine
 
-" gitgutter
+" gitgutter color preferences
 hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
-hi GitGutterChange cterm=bold ctermbg=NONE ctermfg=200
+hi GitGutterChange cterm=bold ctermbg=NONE ctermfg=166
 hi GitGutterDelete cterm=bold ctermbg=NONE ctermfg=203
 hi GitGutterChangeDelete cterm=bold ctermbg=NONE ctermfg=202
 
@@ -304,7 +312,7 @@ hi! link GitGutterDeleteInvisible GitGutterDelete
 hi! link GitGutterChangeDeleteInvisible GitGutterChageDelete
 hi! link GitGutterDeleteIntraLine GitGutterDelete
 
-" standoutTo activate italic font type
+" Unicode to activate italic font type
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
 
@@ -346,5 +354,20 @@ function! <SID>BufcloseCloseIt()
     endif
     if buflisted(l:currentBufNum)
         execute("bdelete! ".l:currentBufNum)
+    endif
+endfunction
+
+" Toggle line number relative with start point or with 
+" line number or absolute number lines
+function! NumberToggle()
+    if(&number == 1)
+        set number
+        set relativenumber!
+	elseif (&relativenumber==1)
+        set relativenumber
+        set number!
+  	else
+        set norelativenumber!
+        set number
     endif
 endfunction
