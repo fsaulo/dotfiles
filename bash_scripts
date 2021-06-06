@@ -110,12 +110,44 @@ _gs() {
   cut -d: -f1
 }
 
-add_diary() {
+diary_add() {
 	FILE_EMPTY=$(nb search --utility rg ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep "Match")
 	if [ -z "$FILE_EMPTY" ]; then
 		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
 	else
 		nb edit ${DIARY_PATH}${FILE_NAME} 
+	fi
+}
+
+wiki_list() {
+	if [[ ${args2} == art* ]]; then
+		nb list --filenames wiki:artigos/
+	elif [[ ${args2} == dis* ]]; then
+		nb list --filenames wiki:discussao/
+	elif [[ ${args2} == infob* ]]; then
+		nb list --filenames wiki:infobox/
+	elif [[ ${args2} == ver* ]]; then
+		nb list --filenames wiki:verbetes/
+	elif [[ ${args2} == ata* ]]; then
+		nb list --filenames wiki:atalhos/
+	elif [[ ${args2} == "notes" ]] || [[ ${args2} == anot* ]]; then
+		nb list --filenames wiki:anotacoes/
+	fi
+}
+
+wiki_atalhos() {
+	ATALHOS_PATH="wiki:atalhos/"
+	LISTA="Lista_de_atalhos.md"
+	USUARIO="Paginas_de_usuario.md"
+	COMUM="Paginas_frequentes.md"
+	if [[ ${args2} == "" ]] || [[ ${args2} == freq* ]]; then 
+		nb edit ${ATALHOS_PATH}${COMUM}
+	elif [[ ${args2} == "show" ]] || [[ ${args2} == "open" ]]; then
+		nb peek wiki:atalhos/
+	elif [[ ${args2} == "pu" ]] || [[ ${args2} == us* ]]; then
+		nb edit ${ATALHOS_PATH}${USUARIO}
+	elif [[ ${args2} == lis* ]] || [[ ${args2} == "all" ]]; then
+		nb edit ${ATALHOS_PATH}${LISTA}
 	fi
 }
 
@@ -130,7 +162,7 @@ nbdiary() {
 			if [[ ! "$2" == "" ]]; then
 				nb edit ${DIARY_PATH}"$2"
 			else
-				add_diary
+				diary_add
 			fi
 		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
 			nb list ${DIARY_PATH}
@@ -138,7 +170,7 @@ nbdiary() {
 			DATE=$(date --date="$*" +"%Y%m%d" 2>/dev/null)
 			TODAY=$(date +"%Y%m%d")
 			if [[ ${DATE} == ${TODAY} ]]; then
-				add_diary
+				diary_add
 			elif [ ! -z ${DATE} ]; then
 				FILE_NAME=${DATE}.md
 				nb edit ${DIARY_PATH}${FILE_NAME}
@@ -163,20 +195,37 @@ nbwiki() {
 		else
 			echo "Command not found"
 		fi
+	elif [ "$1" == "list" ]; then
+		args2=$2
+		wiki_list
 	else
-		while [ ! -z "$1" ]; do
-			if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
-				nb edit ${WIKI}${EXPANDE}
-			elif [[ "$1" == "menores" ]] || [[ "$1" == "menor" ]] || [[ "$1" == "m" ]]; then
-				nb edit ${WIKI}${MENORES}
-			elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
-				nb edit ${WIKI}${TRADUZ}
-			elif [[ "$1" == "vigia" ]] || [[ "$1" == "v" ]] || [[ "$1" == "watch" ]]; then
-				nb edit ${WIKI}${VIGIA}
-			elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
-				nb list wiki:
-			fi
-		shift
-		done
+		if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
+			nb edit ${WIKI}${EXPANDE}
+		elif [[ "$1" == "menores" ]] || [[ "$1" == "menor" ]] || [[ "$1" == "m" ]]; then
+			nb edit ${WIKI}${MENORES}
+		elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
+			nb edit ${WIKI}${TRADUZ}
+		elif [[ "$1" == "vigia" ]] || [[ "$1" == "v" ]] || [[ "$1" == "watch" ]]; then
+			nb edit ${WIKI}${VIGIA}
+		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+			nb list wiki:
+		elif [[ "$1" == "atalhos" ]] || [[ "$1" == "shortcuts" ]] || [[ "$1" == ata* ]]; then
+			args2=$2
+			args3=$3
+			wiki_atalhos
+		fi
+	fi
+}
+
+nbhome() {
+	HOME_LISTA="home:listas/"
+	FILMES="Filmes_para_ver.md"
+	MUSICAS="Musicas_para_nao_esquecer.md"
+	if [[ "$1" == "" ]]; then
+		nb peek home:
+	elif [[ "$1" == movi* ]] || [[ "$1" == fil* ]]; then
+		nb edit ${HOME_LISTA}${FILMES}
+	elif [[ "$1" == musi* ]]; then
+		nb edit ${HOME_LISTA}${MUSICAS}
 	fi
 }
