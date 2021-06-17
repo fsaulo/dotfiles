@@ -110,14 +110,6 @@ _gs() {
   cut -d: -f1
 }
 
-diary_add() {
-	FILE_EMPTY=$(nb search --utility rg ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep "Match")
-	if [ -z "$FILE_EMPTY" ]; then
-		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
-	else
-		nb edit ${DIARY_PATH}${FILE_NAME} 
-	fi
-}
 
 wiki_list() {
 	if [[ ${args2} == art* ]]; then
@@ -151,34 +143,6 @@ wiki_atalhos() {
 	fi
 }
 
-nbdiary() {
-	DIARY_PATH=home:diary/
-	FILE_NAME="`date +"%Y%m%d"`.md"
-	TODAYS_DATE=`date`
-	if [ $# -eq 0 ]; then
-		nb peek ${DIARY_PATH}
-	else
-		if [[ "$1" == "edit" ]] || [[ "$1" == "e" ]] || [[ "$1" == "add" ]]; then
-			if [[ ! "$2" == "" ]]; then
-				nb edit ${DIARY_PATH}"$2"
-			else
-				diary_add
-			fi
-		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
-			nb list ${DIARY_PATH}
-		else
-			DATE=$(date --date="$*" +"%Y%m%d" 2>/dev/null)
-			TODAY=$(date +"%Y%m%d")
-			if [[ ${DATE} == ${TODAY} ]]; then
-				diary_add
-			elif [ ! -z ${DATE} ]; then
-				FILE_NAME=${DATE}.md
-				nb edit ${DIARY_PATH}${FILE_NAME}
-			fi
-		fi
-	fi
-}
-
 nbwiki() {
 	WIKI="wiki:verbetes/"
 	VIGIA="Wiki_vigia.md"
@@ -201,7 +165,7 @@ nbwiki() {
 	else
 		if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
 			nb edit ${WIKI}${EXPANDE}
-		elif [[ "$1" == "menores" ]] || [[ "$1" == "menor" ]] || [[ "$1" == "m" ]]; then
+		elif [[ "$1" == menor* ]] || [[ "$1" == "m" ]] || [[ "$1" == peq* ]]; then
 			nb edit ${WIKI}${MENORES}
 		elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
 			nb edit ${WIKI}${TRADUZ}
@@ -216,6 +180,50 @@ nbwiki() {
 		fi
 	fi
 }
+
+diary_add() {
+	FILE_EMPTY=$(nb list ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
+	if [ -z "$FILE_EMPTY" ]; then
+		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
+	else
+		nb edit ${DIARY_PATH}${FILE_NAME} 
+	fi
+}
+
+nbdiary() {
+	DIARY_PATH="home:diario/"
+	FILE_NAME="`date +"%Y%m%d"`.md"
+	TODAYS_DATE=`date`
+	if [ $# -eq 0 ]; then
+		diary_add
+	else
+		if [[ "$1" == edit* ]] || [[ "$1" == escr* ]] || [[ "$1" == "add" ]]; then
+			if [[ ! "$2" == "" ]]; then
+				nb edit ${DIARY_PATH}"$2"
+			else
+				diary_add
+			fi
+		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+			if [[ "$2" == "" ]]; then
+				nb list ${DIARY_PATH}
+			else
+				nb list "$2" ${DIARY_PATH}
+			fi
+		elif [[ "$1" == "open" ]] || [[ "$1" == "show" ]]; then
+			nb peek ${DIARY_PATH}
+		else
+			DATE=$(date --date="$*" +"%Y%m%d" 2>/dev/null)
+			TODAY=$(date +"%Y%m%d")
+			if [[ ${DATE} == ${TODAY} ]]; then
+				diary_add
+			elif [ ! -z ${DATE} ]; then
+				FILE_NAME=${DATE}.md
+				nb edit ${DIARY_PATH}${FILE_NAME}
+			fi
+		fi
+	fi
+}
+
 
 nbhome() {
 	HOME_LISTA="home:listas/"
