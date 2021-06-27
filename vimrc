@@ -286,6 +286,8 @@ hi Pmenu ctermfg=233 cterm=NONE ctermbg=133
 hi PmenuSel cterm=bold ctermfg=244 ctermbg=0
 hi PmenuSbar ctermbg=240
 hi PmenuThumb ctermbg=244
+hi Folded cterm=bold ctermbg=NONE
+hi FoldColumn cterm=bold ctermbg=NONE
 hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
 hi DiffChange ctermbg=232 ctermfg=212 cterm=reverse
 hi DiffDelete ctermbg=232 ctermfg=203 cterm=reverse
