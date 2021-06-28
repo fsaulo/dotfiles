@@ -192,7 +192,8 @@ nbwiki() {
 }
 
 diary_add() {
-	FILE_EMPTY=$(nb list ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
+	FILE_EMPTY=$(nb ls --filenames ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
+	echo "$FILE_EMPTY"
 	if [ -z "$FILE_EMPTY" ]; then
 		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
 	else
