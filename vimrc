@@ -14,24 +14,24 @@
 " Reload when a file is changed from the outside
 set autoread
 set mouse=a
-set updatetime=100
+set updatetime=10
 
 " Map leader key
 let mapleader = ","
 
 " Fast saving and quitting
-nmap <silent><leader>bd :bd!<CR>
-nmap <silent><leader>w  :w!<CR>
-nmap <silent><leader>q  :wq!<CR>
-nmap <silent><leader>x  :q!<CR>
+nmap <silent><leader>z :bd!<CR>
+nmap <silent><leader>w :w!<CR>
+nmap <silent><leader>q :wq!<CR>
+nmap <silent><leader>x :q!<CR>
 
 " Navigate between buffers
 nnoremap gb :buffers<CR>:buffer<Space>
 nnoremap <leader>B :bprevious<CR>
 nnoremap <leader>b :bnext<CR>
 
-" Set working directory to the file being edited
-nnoremap <leader>cd :cd %:p:h<CR>:pwd<CR>
+" Close all buffers except current
+nnoremap <silent><leader>o :BufOnly<CR>
 
 set nocompatible
 set number
@@ -45,6 +45,7 @@ set clipboard=unnamedplus
 set conceallevel=0
 set textwidth=0
 set wrapmargin=0
+set noswapfile
 
 " Make navigation more amenable to the long wrapping lines
 noremap <buffer> k gk
@@ -76,7 +77,6 @@ vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>")
 vnoremap <C-r> "0y<Esc>:%s/<C-r>0//g<left><left>
 
 " Insert line above/below without entering insert mode
-nmap <leader>o O<Esc>
 nmap <CR> o<Esc>
 
 " Paste in new line below
@@ -125,12 +125,14 @@ set tm=500
 " Enable bash alieses in non-interactive shell
 let $BASH_ENV = "~/.vim_bash_env"
 
+" Paste content of visually selected register ["p]
+nnoremap "p :reg <bar> exec 'normal! "'.input('>').'p'<CR>
+
 " plugins
 " -------
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline-themes'
 Plugin 'djoshea/vim-autoread'
 Plugin 'xuxinx/vim-tabline'
 Plugin 'evansalter/vim-checklist'
@@ -148,7 +150,10 @@ Plugin 'junegunn/fzf.vim'
 Plugin 'jmcantrell/vim-virtualenv'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'houtsnip/vim-emacscommandline'
+Plugin 'ton/vim-bufsurf'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'fsaulo/vim-airline'
+Plugin 'rhysd/conflict-marker.vim'
 
 call vundle#end()
 
@@ -203,7 +208,7 @@ let g:vim_markdown_strikethrough = 0
 let g:tex_conceal = ""
 
 let g:fzf_layout = {'down': '30%'}
-let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-]':'vsplit'}
+let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
@@ -232,8 +237,6 @@ nnoremap <C-L> :Commits<CR>
 
 " Checklist toggle for markdown files
 nnoremap <leader>c  :ChecklistToggleCheckbox<CR>
-nnoremap <leader>ce :ChecklistEnableCheckbox<CR>
-nnoremap <leader>cc :ChecklistDisableCheckbox<CR>
 
 " Execute shell commands and dump in a new vim window
 nnoremap <leader>\ :Shell<Space>
@@ -242,6 +245,7 @@ nnoremap <leader>\ :Shell<Space>
 nnoremap <F5> :Shell gcc -o cout.lo -std=c99 -lm %<Space>
 nnoremap <F6> :Shell xclip -o -selection clipboard \| ./cout.lo<Space>
 nnoremap <F7> :Shell rm -f *.lo *.out<CR><C-W>c<CR>
+
 nnoremap <F8> :Shell cat % \| clipboard<CR><C-W>c<CR>
 
 " Map tagbar
@@ -253,6 +257,22 @@ let g:gitgutter_enabled = 0
 " Mag gitgutter toggle
 nnoremap <silent><leader>ht :GitGutterToggle<CR>
 nnoremap <silent><C-n> :call NumberToggle()<CR>
+
+" Map bufsurf
+nmap gn <Plug>(buf-surf-forward)
+nmap gp <Plug>(buf-surf-back)
+
+" Fugitive conflict resolution
+nnoremap <leader>gd :Gvdiffsplit!<CR>
+nnoremap gh :diffget //2<CR>:diffupdate<CR>
+nnoremap gl :diffget //3<CR>:diffupdate<CR>
+
+" Conflict marker related
+let g:conflict_marker_enable_mappings = 1
+let g:conflict_marker_enable_matchit = 0
+
+" disable the default highlight group
+let g:conflict_marker_highlight_group = ''
 
 " theme
 " -----
@@ -286,8 +306,6 @@ hi Pmenu ctermfg=233 cterm=NONE ctermbg=133
 hi PmenuSel cterm=bold ctermfg=244 ctermbg=0
 hi PmenuSbar ctermbg=240
 hi PmenuThumb ctermbg=244
-hi Folded cterm=bold ctermbg=NONE
-hi FoldColumn cterm=bold ctermbg=NONE
 hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
 hi DiffChange ctermbg=232 ctermfg=212 cterm=reverse
 hi DiffDelete ctermbg=232 ctermfg=203 cterm=reverse
@@ -297,7 +315,7 @@ hi! link SignColumn LineNr
 hi! link ColorColumn ErrorMsg
 hi! link VertSplit StatusLine
 
-" gitgutter color preferences
+" Gitgutter color preferences
 hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
 hi GitGutterChange cterm=bold ctermbg=NONE ctermfg=166
 hi GitGutterDelete cterm=bold ctermbg=NONE ctermfg=203
@@ -314,6 +332,14 @@ hi! link GitGutterDeleteInvisible GitGutterDelete
 hi! link GitGutterChangeDeleteInvisible GitGutterChageDelete
 hi! link GitGutterDeleteIntraLine GitGutterDelete
 
+" Resolving conflicts highlighting
+hi ConflictMarkerBegin cterm=bold ctermfg=35
+hi ConflictMarkerOurs ctermbg=NONE
+hi ConflictMarkerTheirs ctermbg=NONE 
+hi ConflictMarkerEnd cterm=bold ctermfg=33
+hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
+hi ConflictMarkerSeparator cterm=bold ctermfg=35
+
 " Unicode to activate italic font type
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
@@ -326,6 +352,7 @@ set smarttab
 " Define 1 tab = 4 spaces
 set shiftwidth=4
 set tabstop=4
+set expandtab
 
 " Auto and smart indent
 set ai
@@ -338,6 +365,9 @@ vnoremap <C-d> "+d
 
 " Enable pastetoggle
 set pastetoggle=<F2>
+
+set timeout ttimeout
+set timeoutlen=5000 ttimeoutlen=5000
 
 " scripts
 " -------

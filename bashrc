@@ -102,7 +102,7 @@ complete -cf sudo
 # Enable checkwinsize so that bash will check the terminal size when
 # it regains control.  #65623
 # http://cnswww.cns.cwru.edu/~chet/bash/FAQ (E11)
-shopt -s checkwinsize
+# shopt -s checkwinsize
 shopt -s expand_aliases
 
 # Enable history appending instead of overwriting.  #139609
@@ -131,4 +131,3 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
-
