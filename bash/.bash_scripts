@@ -1,0 +1,269 @@
+# .bash_scripts [Saulo G. Felix]
+
+function organize {
+    for file in ./* ; do
+        mv -v "$file" "$(echo $file|sed -e 's/\([A-Z]\)/-\L\1/g' -e 's/^.\/-//' -e 's/ /-/g')"
+    done
+}
+
+function col {
+	  awk -v col=$1 '{print $col}'
+}
+
+function skip {
+    n=$(($1 + 1))
+    cut -d' ' -f$n-
+}
+
+# cb - copy to clipboard
+# A shortcut function that simplifies usage of xclip.
+# Accepts input from either stdin (pipe), or params.
+cb() {
+  local _scs_col="\e[01;34m"; local _wrn_col='\e[01;31m'; local _trn_col='\e[01;33m'
+  # Check that xclip is installed.
+  if ! type xclip > /dev/null 2>&1; then
+    echo -e "$_wrn_col""You must have the 'xclip' program installed.\e[0m"
+  # Check user is not root (root doesn't have access to user xorg server)
+  elif [[ "$USER" == "root" ]]; then
+    echo -e "$_wrn_col""Must be regular user (not root) to copy a file to the clipboard.\e[0m"
+  else
+    # If no tty, data should be available on stdin
+    if ! [[ "$( tty )" == /dev/* ]]; then
+      input="$(< /dev/stdin)"
+    # Else, fetch input from params
+    else
+      input="$*"
+    fi
+    if [ -z "$input" ]; then  # If no input, print usage message.
+      echo "Copies a string to the clipboard."
+      echo "Usage: cb <string>"
+      echo "       echo <string> | cb"
+    else
+      # Copy input to clipboard
+      echo -n "$input" | xclip -selection c
+      # Truncate text for status
+      if [ ${#input} -gt 80 ]; then input="$(echo $input | cut -c1-80)$_trn_col...\e[0m"; fi
+      # Print status.
+      echo -e "$_scs_col""Copied to clipboard:\e[0m $input"
+    fi
+  fi
+}
+
+cbf() {
+	cat "$@" | cb
+}
+
+
+# FZF scritps adapted to handle git repositories
+# See `bashrc` to remember how to use it
+is_in_git_repo() {
+  git rev-parse HEAD > /dev/null 2>&1
+}
+
+fzf-down() {
+  fzf --multi --inline-info --height 50% -1 --layout reverse  --border none --bind ctrl-/:toggle-preview "$@"
+}
+
+_gf() {
+  is_in_git_repo || return
+  git -c color.status=always status --short |
+  fzf-down -m --ansi --nth 2..,.. --height 100% --preview-window right,border \
+    --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+  cut -c4- | sed 's/.* -> //'
+}
+
+_gb() {
+  is_in_git_repo || return
+  git branch -a --color=always | grep -v '/HEAD\s' | sort |
+  fzf-down --ansi --multi --tac --preview-window up,5,border-horizontal \
+    --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
+  sed 's/^..//' | cut -d' ' -f1 |
+  sed 's#^remotes/##'
+}
+
+_gt() {
+  is_in_git_repo || return
+  git tag --sort -version:refname |
+  fzf-down --multi \
+    --preview 'git show --color=always {}'
+}
+
+_gh() {
+  is_in_git_repo || return
+  git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+  fzf-down --ansi --no-sort --height 70% --reverse --multi --preview-window up,10,border-horizontal \
+ 	--bind 'ctrl-y:execute-silent(grep -o "[a-f0-9]\{7,\}" <<< {} | xclip -i -selection clipboard)+abort' \
+    --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' | grep -o "[a-f0-9]\{7,\}"
+}
+
+_gr() {
+  is_in_git_repo || return
+  git remote -v | awk '{print $1 "\t" $2}' | uniq |
+  fzf-down --tac \
+    --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1}' |
+  cut -d$'\t' -f1
+}
+
+_gs() {
+  is_in_git_repo || return
+  git stash list | fzf-down --reverse -d: --preview 'git show --color=always {1}' |
+  cut -d: -f1
+}
+
+diary_add() {
+	FILE_EMPTY=$(nb search --utility rg ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep "Match")
+	if [ -z "$FILE_EMPTY" ]; then
+		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
+	else
+		nb edit ${DIARY_PATH}${FILE_NAME} 
+	fi
+}
+
+wiki_list() {
+	if [[ ${args2} == art* ]]; then
+		nb list --filenames wiki:artigos/
+	elif [[ ${args2} == dis* ]]; then
+		nb list --filenames wiki:discussao/
+	elif [[ ${args2} == infob* ]]; then
+		nb list --filenames wiki:infobox/
+	elif [[ ${args2} == ver* ]]; then
+		nb list --filenames wiki:verbetes/
+	elif [[ ${args2} == ata* ]]; then
+		nb list --filenames wiki:atalhos/
+	elif [[ ${args2} == "notes" ]] || [[ ${args2} == anot* ]]; then
+		nb list --filenames wiki:anotacoes/
+	fi
+}
+
+wiki_atalhos() {
+	ATALHOS_PATH="wiki:atalhos/"
+	LISTA="Lista_de_atalhos.md"
+	USUARIO="Paginas_de_usuario.md"
+	COMUM="Paginas_frequentes.md"
+	if [[ ${args2} == "" ]] || [[ ${args2} == freq* ]]; then 
+		nb edit ${ATALHOS_PATH}${COMUM}
+	elif [[ ${args2} == "show" ]] || [[ ${args2} == "open" ]]; then
+		nb peek wiki:atalhos/
+	elif [[ ${args2} == "pu" ]] || [[ ${args2} == us* ]]; then
+		nb edit ${ATALHOS_PATH}${USUARIO}
+	elif [[ ${args2} == lis* ]] || [[ ${args2} == "all" ]]; then
+		nb edit ${ATALHOS_PATH}${LISTA}
+	fi
+}
+
+nbwiki() {
+	WIKI="wiki:verbetes/"
+	VIGIA="Wiki_vigia.md"
+	TRADUZ="Wiki_traduz.md"
+	MENORES="Wiki_menores.md"
+	EXPANDE="Wiki_expande.md"
+	if [ $# -eq 0 ]; then
+		nb peek wiki:
+	elif [ "$1" == "artigos" ]; then
+		if  [ "$2" == "" ]; then
+			nb peek wiki:artigos/
+		elif [[ "$2" == "list" ]] || [[ "$2" == "ls" ]]; then
+			nb list --filenames wiki:artigos/
+		else
+			echo "Command not found"
+		fi
+	elif [ "$1" == "list" ]; then
+		args2=$2
+		wiki_list
+	else
+		if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
+			nb edit ${WIKI}${EXPANDE}
+		elif [[ "$1" == menor* ]] || [[ "$1" == "m" ]] || [[ "$1" == peq* ]]; then
+			nb edit ${WIKI}${MENORES}
+		elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
+			nb edit ${WIKI}${TRADUZ}
+		elif [[ "$1" == "vigia" ]] || [[ "$1" == "v" ]] || [[ "$1" == "watch" ]]; then
+			nb edit ${WIKI}${VIGIA}
+		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+			nb list wiki:
+		elif [[ "$1" == "sync" ]]; then
+			nb use wiki >/dev/null 2>&1 && nb sync 
+		elif [[ "$1" == "atalhos" ]] || [[ "$1" == "shortcuts" ]] || [[ "$1" == ata* ]]; then
+			args2=$2
+			args3=$3
+			wiki_atalhos
+		fi
+	fi
+}
+
+diary_add() {
+	FILE_EMPTY=$(nb ls --filenames ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
+	echo "$FILE_EMPTY"
+	if [ -z "$FILE_EMPTY" ]; then
+		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
+	else
+		nb edit ${DIARY_PATH}${FILE_NAME} 
+	fi
+}
+
+nbdiary() {
+	DIARY_PATH="home:diario/"
+	FILE_NAME="`date +"%Y%m%d"`.md"
+	TODAYS_DATE=`date`
+	if [ $# -eq 0 ]; then
+		diary_add
+	else
+		if [[ "$1" == edit* ]] || [[ "$1" == escr* ]] || [[ "$1" == "add" ]]; then
+			if [[ ! "$2" == "" ]]; then
+				nb edit ${DIARY_PATH}"$2"
+			else
+				diary_add
+			fi
+		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+			if [[ "$2" == "" ]]; then
+				nb list ${DIARY_PATH}
+			else
+				nb list "$2" ${DIARY_PATH}
+			fi
+		elif [[ "$1" == "open" ]] || [[ "$1" == "show" ]]; then
+			nb peek ${DIARY_PATH}
+		else
+			DATE=$(date --date="$*" +"%Y%m%d" 2>/dev/null)
+			TODAY=$(date +"%Y%m%d")
+			if [[ ${DATE} == ${TODAY} ]]; then
+				diary_add
+			elif [ ! -z ${DATE} ]; then
+				FILE_NAME=${DATE}.md
+				nb edit ${DIARY_PATH}${FILE_NAME}
+			fi
+		fi
+	fi
+}
+
+nbhome() {
+	HOME_LISTA="home:listas/"
+	FILMES="Filmes_para_ver.md"
+	MUSICAS="Musicas_para_nao_esquecer.md"
+	if [[ "$1" == "" ]]; then
+		nb peek home:
+	elif [[ "$1" == movi* ]] || [[ "$1" == fil* ]]; then
+		nb edit ${HOME_LISTA}${FILMES}
+	elif [[ "$1" == musi* ]]; then
+		nb edit ${HOME_LISTA}${MUSICAS}
+	fi
+}
+
+function ranger-cd {
+    local IFS=$'\t\n'
+    local tempfile="$(mktemp -t tmp.XXXXXX)"
+    local ranger_cmd=(
+        command
+        ranger
+        --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
+    )
+
+    ${ranger_cmd[@]} "$@"
+    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
+        cd -- "$(cat "$tempfile")" || return
+    fi
+    command rm -f -- "$tempfile" 2>/dev/null
+}
+
+duckit() {
+    w3m https://lite.duckduckgo.com/lite/?q="$@"
+}
