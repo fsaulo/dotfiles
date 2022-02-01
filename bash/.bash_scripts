@@ -137,9 +137,9 @@ wiki_list() {
 
 wiki_atalhos() {
 	ATALHOS_PATH="wiki:atalhos/"
-	LISTA="Lista_de_atalhos.md"
-	USUARIO="Paginas_de_usuario.md"
-	COMUM="Paginas_frequentes.md"
+	LISTA="wiki_lista_de_atalhos.md"
+	USUARIO="wiki_paginas_de_usuario.md"
+	COMUM="wiki_paginas_frequentes.md"
 	if [[ ${args2} == "" ]] || [[ ${args2} == freq* ]]; then 
 		nb edit ${ATALHOS_PATH}${COMUM}
 	elif [[ ${args2} == "show" ]] || [[ ${args2} == "open" ]]; then
@@ -153,10 +153,10 @@ wiki_atalhos() {
 
 nbwiki() {
 	WIKI="wiki:verbetes/"
-	VIGIA="Wiki_vigia.md"
-	TRADUZ="Wiki_traduz.md"
-	MENORES="Wiki_menores.md"
-	EXPANDE="Wiki_expande.md"
+	VIGIA="wiki_vigia.md"
+	TRADUZ="wiki_traduz.md"
+	MENORES="wiki_menores.md"
+	EXPANDE="wiki_expande.md"
 	if [ $# -eq 0 ]; then
 		nb peek wiki:
 	elif [ "$1" == "artigos" ]; then
@@ -193,7 +193,6 @@ nbwiki() {
 
 diary_add() {
 	FILE_EMPTY=$(nb ls --filenames ${DIARY_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
-	echo "$FILE_EMPTY"
 	if [ -z "$FILE_EMPTY" ]; then
 		nb add --edit ${DIARY_PATH}${FILE_NAME} --title "Today's events [$TODAYS_DATE]"
 	else
@@ -203,7 +202,7 @@ diary_add() {
 
 nbdiary() {
 	DIARY_PATH="home:diario/"
-	FILE_NAME="`date +"%Y%m%d"`.md"
+	FILE_NAME="`date +'%Y%m%d'`.md"
 	TODAYS_DATE=`date`
 	if [ $# -eq 0 ]; then
 		diary_add
@@ -235,10 +234,39 @@ nbdiary() {
 	fi
 }
 
+quick_add() {
+	FILE_EMPTY=$(nb ls --filenames ${QUICK_NOTES_PATH} ${FILE_NAME} 2>/dev/null | grep ".md")
+	if [ -z "$FILE_EMPTY" ]; then
+		nb add --edit ${QUICK_NOTES_PATH}${FILE_NAME} --title "Quick note [$TODAYS_DATE]"
+	else
+		nb edit ${QUICK_NOTES_PATH}${FILE_NAME} 
+	fi
+}
+
+# Taking quick notes
+nbquick() {
+	QUICK_NOTES_PATH="home:quick/"
+	FILE_NAME="`date +'%Y%m%d%H%M%S'`.md"
+	TODAYS_DATE=`date`
+	if [ $# -eq 0 ]; then
+	    quick_add	
+    else
+        if [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
+            if [[ "$2" == "" ]]; then
+                nb list ${QUICK_NOTES_PATH}
+            else
+                nb list "$2" ${QUICK_NOTES_PATH}
+            fi
+        elif [[ "$1" == "open" ]] || [[ "$1" == "show" ]]; then
+            nb peek ${QUICK_NOTES_PATH}
+        fi
+    fi
+}
+
 nbhome() {
 	HOME_LISTA="home:listas/"
-	FILMES="Filmes_para_ver.md"
-	MUSICAS="Musicas_para_nao_esquecer.md"
+	FILMES="2021_filmes.md"
+	MUSICAS="2021_musicas.md"
 	if [[ "$1" == "" ]]; then
 		nb peek home:
 	elif [[ "$1" == movi* ]] || [[ "$1" == fil* ]]; then
@@ -248,6 +276,8 @@ nbhome() {
 	fi
 }
 
+# Automatically change the current working directory to the last 
+# visited one after ranger quits.
 function ranger-cd {
     local IFS=$'\t\n'
     local tempfile="$(mktemp -t tmp.XXXXXX)"
