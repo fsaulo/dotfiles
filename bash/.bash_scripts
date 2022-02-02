@@ -243,7 +243,8 @@ quick_add() {
 	fi
 }
 
-# Taking quick notes
+# Taking quick notes. Opens text file in text editor (vim)
+# New notes are indexed and registered in version control
 nbquick() {
 	QUICK_NOTES_PATH="home:quick/"
 	FILE_NAME="`date +'%Y%m%d%H%M%S'`.md"
@@ -259,10 +260,15 @@ nbquick() {
             fi
         elif [[ "$1" == "open" ]] || [[ "$1" == "show" ]]; then
             nb peek ${QUICK_NOTES_PATH}
+        elif [[ "$1" == "edit" ]] || [[ "$1" == "last" ]] || [[ "$1" == "e" ]]; then
+            nb edit "$(nb list --no-index --paths home:quick/ -1 | head -qn1)"
+        elif [[ "$1" == del* ]] || [[ "$1" == "rm" ]]; then
+            nb delete "$(nb list --no-index --paths home:quick/ -1 | head -qn1)"
         fi
     fi
 }
 
+# Open main folder of notes in file explorer (ranger)
 nbhome() {
 	HOME_LISTA="home:listas/"
 	FILMES="2021_filmes.md"
