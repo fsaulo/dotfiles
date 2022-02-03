@@ -1,4 +1,6 @@
-# .bash_scripts [Saulo G. Felix]
+#!/bin/bash
+
+#.bash_scripts [Saulo G. Felix]
 
 function organize {
     for file in ./* ; do
@@ -247,7 +249,7 @@ quick_add() {
 # New notes are indexed and registered in version control
 nbquick() {
 	QUICK_NOTES_PATH="home:quick/"
-	FILE_NAME="`date +'%Y%m%d%H%M%S'`.md"
+	FILE_NAME="`date +'%d%m%Y%H%M%S'`.md"
 	TODAYS_DATE=`date`
 	if [ $# -eq 0 ]; then
 	    quick_add	
@@ -298,6 +300,85 @@ function ranger-cd {
         cd -- "$(cat "$tempfile")" || return
     fi
     command rm -f -- "$tempfile" 2>/dev/null
+}
+
+nbsort_help() {
+    echo 'Usage: nbsort [OPTIONS]... {-d [DIR]... -t [TAG]...}'
+    echo 'Organize notes by given tag. Renames notes taken quickly using'
+    echo ''
+    echo 'Use variable NB_DIR to configure local repository'
+    echo 'Local repository is currently set to:' 
+    echo '  '$repo
+    echo ''
+    echo 'Options:'
+    echo '  -d, --dir    relative path to search for --tag, default root'
+    echo '                is set by NB_DIR. Can be set with --repo too'
+    echo '  -f, --folder target directory where to put found notes'
+    echo '  -r, --repo   root directory'
+    echo '  -t, --tag    search recursively for given tag'
+    echo ''
+    echo 'Example:'
+    echo '  nbsort -d home/quick -t physics --folder academia'
+    echo 'Written by Saulo G. Felix. 2022'
+}
+
+# Organizes notes. Notes are assumed to be named with fixed format.
+# Notes are renamed to specific format. Titles are extracted from file.
+# They are stored in the relative path passed by arguments. Root directory
+# is set by environment variable NB_DIR
+nbsort() {
+    local repo=$NB_DIR
+    local home=$repo/home
+    local unix=$repo/linux
+    local dir=
+    local tag=
+    local target=
+    local files=
+
+	if [ $# -lt 2 ]; then
+        nbsort_help
+        return 1
+    else
+        while [[ "$#" -gt 0 ]]; do case $1 in
+                -f|--folder) target=$repo/${2%/}; shift ;;
+                -d|--dir) dir=${2%/}; shift ;;
+                -t|--tag) tag="$2"; shift ;;
+                -r|--repo) repo=${2%/}; shift ;;
+                *) echo "Unknown parameter passed: $1\n"; nbsort_help; return 1 ;;
+            esac
+            shift
+        done
+        if [[ -z "$tag" ]]; then return 0; else local files=`grep -l "#$tag" $repo/$dir/*`; fi
+        for i in $files; do
+            local name=`basename $i .md`
+            echo "Found [ #$tag ] in '$i'"
+            if [[ $name == ?(-)+([0-9]) ]] && [[ ${#name} -eq 14 ]]; then
+                # get first 8 bytes of filename and format to %d_%m_%Y_
+                filename=`basename $i`
+                prefix=`echo $filename | cut --bytes=1-4 | sed -e 's/\(..\)/\1_/g'`
+                suffix=`echo $filename | cut --bytes=5-8`
+
+                # remove first line of file, jump blank line & get 3rd line
+                sed '1d' $i | sed -e '0,/^[[:space:]]*$/{//d}' | sed '1s/^/# /' > /tmp/$filename.tmp
+                title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%\._-]//g'`
+                title=$prefix$suffix"${title// /_}".md
+
+                if [[ -z "$target" ]]; then
+                    if [[ $tag == "linux" ]]; then target=$unix; else return 1; fi
+                fi
+
+                # move file to specified location
+                mv /tmp/$filename.tmp $target/$title
+                if [ "$?" -ne 0 ]; then return 1
+                else echo "'$NB_DIR/$dir/$filename' -> '$target/$title'"
+                fi
+
+                # cleanup. backup would probably be safer
+                rm -rf $i.tmp >/dev/null 2>&1
+                rm -rf $i >/dev/null 2>&1
+            fi
+        done
+    fi
 }
 
 duckit() {

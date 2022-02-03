@@ -54,3 +54,4 @@ export FZF_DEFAULT_COMMAND='git ls-files --cached --others --exclude-standard | 
 export FZF_DEFAULT_OPTS="--inline-info -m --bind='ctrl-y:execute-silent(echo {} | xclip -i -selection clipboard)+abort'"
 export QT_QPA_PLATFORMTHEME=
 export SSH_ASKPASS=/usr/bin/ksshaskpass
+export NB_DIR=$HOME/Dropbox/Documents/workspace/notes
