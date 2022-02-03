@@ -1,21 +1,6 @@
 #!/bin/bash
 
-#.bash_scripts [Saulo G. Felix]
-
-function organize {
-    for file in ./* ; do
-        mv -v "$file" "$(echo $file|sed -e 's/\([A-Z]\)/-\L\1/g' -e 's/^.\/-//' -e 's/ /-/g')"
-    done
-}
-
-function col {
-	  awk -v col=$1 '{print $col}'
-}
-
-function skip {
-    n=$(($1 + 1))
-    cut -d' ' -f$n-
-}
+# .bash_scripts [Saulo G. Felix]
 
 # cb - copy to clipboard
 # A shortcut function that simplifies usage of xclip.
@@ -138,27 +123,27 @@ wiki_list() {
 }
 
 wiki_atalhos() {
-	ATALHOS_PATH="wiki:atalhos/"
-	LISTA="wiki_lista_de_atalhos.md"
-	USUARIO="wiki_paginas_de_usuario.md"
-	COMUM="wiki_paginas_frequentes.md"
+	local atalhos_path="wiki:atalhos/"
+	local lista="wiki_lista_de_atalhos.md"
+	local usuario="wiki_paginas_de_usuario.md"
+	local comum="wiki_paginas_frequentes.md"
 	if [[ ${args2} == "" ]] || [[ ${args2} == freq* ]]; then 
-		nb edit ${ATALHOS_PATH}${COMUM}
+		nb edit ${atalhos_path}${comum}
 	elif [[ ${args2} == "show" ]] || [[ ${args2} == "open" ]]; then
 		nb peek wiki:atalhos/
 	elif [[ ${args2} == "pu" ]] || [[ ${args2} == us* ]]; then
-		nb edit ${ATALHOS_PATH}${USUARIO}
+		nb edit ${atalhos_path}${usuario}
 	elif [[ ${args2} == lis* ]] || [[ ${args2} == "all" ]]; then
-		nb edit ${ATALHOS_PATH}${LISTA}
+		nb edit ${atalhos_path}${lista}
 	fi
 }
 
 nbwiki() {
-	WIKI="wiki:verbetes/"
-	VIGIA="wiki_vigia.md"
-	TRADUZ="wiki_traduz.md"
-	MENORES="wiki_menores.md"
-	EXPANDE="wiki_expande.md"
+	local wiki="wiki:verbetes/"
+	local vigia="wiki_vigia.md"
+	local traduz="wiki_traduz.md"
+	local menores="wiki_menores.md"
+	local expande="wiki_expande.md"
 	if [ $# -eq 0 ]; then
 		nb peek wiki:
 	elif [ "$1" == "artigos" ]; then
@@ -174,13 +159,13 @@ nbwiki() {
 		wiki_list
 	else
 		if [[ "$1" == "expande" ]] || [[ "$1" == "ex" ]]; then
-			nb edit ${WIKI}${EXPANDE}
+			nb edit ${wiki}${expande}
 		elif [[ "$1" == menor* ]] || [[ "$1" == "m" ]] || [[ "$1" == peq* ]]; then
-			nb edit ${WIKI}${MENORES}
+			nb edit ${wiki}${menores}
 		elif [[ "$1" == "traduz" ]] || [[ "$1" == "tr" ]] || [[ "$1" == "translate" ]]; then
-			nb edit ${WIKI}${TRADUZ}
+			nb edit ${wiki}${traduz}
 		elif [[ "$1" == "vigia" ]] || [[ "$1" == "v" ]] || [[ "$1" == "watch" ]]; then
-			nb edit ${WIKI}${VIGIA}
+			nb edit ${wiki}${vigia}
 		elif [[ "$1" == "list" ]] || [[ "$1" == "ls" ]]; then
 			nb list wiki:
 		elif [[ "$1" == "sync" ]]; then
@@ -206,6 +191,7 @@ nbdiary() {
 	DIARY_PATH="home:diario/"
 	FILE_NAME="`date +'%Y%m%d'`.md"
 	TODAYS_DATE=`date`
+
 	if [ $# -eq 0 ]; then
 		diary_add
 	else
@@ -251,6 +237,7 @@ nbquick() {
 	QUICK_NOTES_PATH="home:quick/"
 	FILE_NAME="`date +'%d%m%Y%H%M%S'`.md"
 	TODAYS_DATE=`date`
+
 	if [ $# -eq 0 ]; then
 	    quick_add	
     else
@@ -270,19 +257,37 @@ nbquick() {
     fi
 }
 
-# Open main folder of notes in file explorer (ranger)
-nbhome() {
-	HOME_LISTA="home:listas/"
-	FILMES="2021_filmes.md"
-	MUSICAS="2021_musicas.md"
-	if [[ "$1" == "" ]]; then
-		nb peek home:
-	elif [[ "$1" == movi* ]] || [[ "$1" == fil* ]]; then
-		nb edit ${HOME_LISTA}${FILMES}
-	elif [[ "$1" == musi* ]]; then
-		nb edit ${HOME_LISTA}${MUSICAS}
+# Opens nb repository folder in ranger
+nbrepo() {
+    local repo=$NB_DIR
+    local home="home:"
+    local linux="linux:"
+    local academia="academia:"
+    local home_listas=$home"listas"
+    local filmes="01_01_2021_filmes.md"
+    local musicas="01_01_2021_musicas.md"
+    local livros="31_01_2022_livros.md"
+    local sed="03_02_2022_sed_regex_magic.md"
+    local vim="03_02_2022_vim_commands.md"
+    if [[ -z "$1" ]]; then
+        ranger $repo
+    elif [[ "$1" == "home" ]] ; then
+        nb peek $home
+    elif [[ "$1" == "linux" ]] ; then
+        nb peek $linux
+    elif [[ "$1" == acad* ]] || [[ "$1" == "ufs" ]] ; then
+        nb peek $academia
+	elif [[ "$1" == movi* ]] || [[ "$1" == fil* ]] ; then
+		nb edit $home_listas/$filmes
+    elif [[ "$1" == "sed" ]] || [[ "$1" == reg* ]] ; then
+        nb edit $home_listas/$sed
+	elif [[ "$1" == musi* ]] ; then
+		nb edit $home_listas/$musicas
+    elif [[ "$1" == "vim" ]] ; then
+        nb edit $home_listas/$vim
 	fi
 }
+
 
 # Automatically change the current working directory to the last 
 # visited one after ranger quits.
@@ -303,8 +308,8 @@ function ranger-cd {
 }
 
 nbsort_help() {
-    echo 'Usage: nbsort [OPTIONS]... {-d [DIR]... -t [TAG]...}'
-    echo 'Organize notes by given tag. Renames notes taken quickly using'
+    echo 'Usage: nbsort [OPTIONS]... {-d [DIR] -t [TAG]}'
+    echo 'Organize notes easily. Sort notes by tag, rename based on title'
     echo ''
     echo 'Use variable NB_DIR to configure local repository'
     echo 'Local repository is currently set to:' 
@@ -312,14 +317,17 @@ nbsort_help() {
     echo ''
     echo 'Options:'
     echo '  -d, --dir    relative path to search for --tag, default root'
-    echo '                is set by NB_DIR. Can be set with --repo too'
+    echo '                 is set by NB_DIR'
     echo '  -f, --folder target directory where to put found notes'
-    echo '  -r, --repo   root directory'
+    echo '  -r, --repo   sets root directory'
     echo '  -t, --tag    search recursively for given tag'
+    echo '  -h, --help   shows this page'
     echo ''
     echo 'Example:'
-    echo '  nbsort -d home/quick -t physics --folder academia'
-    echo 'Written by Saulo G. Felix. 2022'
+    echo '  nbsort -d my/notes -t physics --folder academia'
+    echo ''
+    echo 'Written by Saulo G. Felix 2022.'
+    return 0
 }
 
 # Organizes notes. Notes are assumed to be named with fixed format.
@@ -344,10 +352,12 @@ nbsort() {
                 -d|--dir) dir=${2%/}; shift ;;
                 -t|--tag) tag="$2"; shift ;;
                 -r|--repo) repo=${2%/}; shift ;;
-                *) echo "Unknown parameter passed: $1\n"; nbsort_help; return 1 ;;
+                -h|--help) help=1; shift ;;
+                *) echo "nbsort: unknown parameter '$1'"; return 1;;
             esac
             shift
         done
+        if [[ "$help" -eq 1 ]]; then nbsort_help; return 0; fi 
         if [[ -z "$tag" ]]; then return 0; else local files=`grep -l "#$tag" $repo/$dir/*`; fi
         for i in $files; do
             local name=`basename $i .md`
