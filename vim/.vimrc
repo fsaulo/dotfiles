@@ -248,7 +248,6 @@ nnoremap <leader>\ :Shell<Space>
 nnoremap <F5> :Shell gcc -o cout.lo -std=c99 -lm %<Space>
 nnoremap <F6> :Shell xclip -o -selection clipboard \| ./cout.lo<Space>
 nnoremap <F7> :Shell rm -f *.lo *.out<CR><C-W>c<CR>
-
 nnoremap <F8> :Shell cat % \| clipboard<CR><C-W>c<CR>
 
 " Map tagbar
@@ -259,6 +258,8 @@ let g:gitgutter_enabled = 0
 
 " Mag gitgutter toggle
 nnoremap <silent><leader>ht :GitGutterToggle<CR>
+
+" Toggle relative numbers
 nnoremap <silent><C-n> :call NumberToggle()<CR>
 
 " Map bufsurf
@@ -273,8 +274,6 @@ nnoremap gl :diffget //3<CR>:diffupdate<CR>
 " Conflict marker related
 let g:conflict_marker_enable_mappings = 1
 let g:conflict_marker_enable_matchit = 0
-
-" disable the default highlight group
 let g:conflict_marker_highlight_group = ''
 
 " theme
