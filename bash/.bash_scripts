@@ -338,6 +338,8 @@ nbsort() {
     local repo=$NB_DIR
     local home=$repo/home
     local unix=$repo/linux
+    local help=0
+    local display=0
     local dir=
     local tag=
     local target=
@@ -349,16 +351,19 @@ nbsort() {
     else
         while [[ "$#" -gt 0 ]]; do case $1 in
                 -f|--folder) target=$repo/${2%/}; shift ;;
-                -d|--dir) dir=${2%/}; shift ;;
-                -t|--tag) tag="$2"; shift ;;
-                -r|--repo) repo=${2%/}; shift ;;
-                -h|--help) help=1; shift ;;
+                -d|--dir)    dir=${2%/};          shift ;;
+                -l|--list)   display=1;           shift ;;
+                -t|--tag)    tag="$2";            shift ;;
+                -r|--repo)   repo=${2%/};         shift ;;
+                -h|--help)   help=1;              shift ;;
                 *) echo "nbsort: unknown parameter '$1'"; return 1;;
             esac
             shift
         done
         if [[ "$help" -eq 1 ]]; then nbsort_help; return 0; fi 
-        if [[ -z "$tag" ]]; then return 0; else local files=`grep -l "#$tag" $repo/$dir/*`; fi
+        if [[ -z "$tag" ]]; then return 0; else local files=`grep -l "#${tag}" $repo/$dir/*`; fi
+        if [[ "$display" -eq 1 ]]; then echo "${files[@]}"; return 0; fi
+        if [[ -z "$target" ]]; then return 0; fi
         for i in $files; do
             local name=`basename $i .md`
             echo "Found [ #$tag ] in '$i'"
@@ -370,7 +375,7 @@ nbsort() {
 
                 # remove first line of file, jump blank line & get 3rd line
                 sed '1d' $i | sed -e '0,/^[[:space:]]*$/{//d}' | sed '1s/^/# /' > /tmp/$filename.tmp
-                title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%\._-]//g'`
+                title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%\._-~ã,;ôâêáóh*&àéíõç]//g'`
                 title=$prefix$suffix"${title// /_}".md
 
                 if [[ -z "$target" ]]; then
