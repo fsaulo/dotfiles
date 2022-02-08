@@ -379,10 +379,6 @@ nbsort() {
                 title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%\._-~ã,;ôâêáóh*&àéíõç]//g'`
                 title=$prefix$suffix"${title// /_}".md
 
-                if [[ -z "$target" ]]; then
-                    if [[ $tag == "linux" ]]; then target=$unix; else return 1; fi
-                fi
-
                 # move file to specified location
                 mv /tmp/$filename.tmp $target/$title
                 if [ "$?" -ne 0 ]; then return 1
