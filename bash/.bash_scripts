@@ -316,9 +316,10 @@ nbsort_help() {
     echo '  '$repo
     echo ''
     echo 'Options:'
-    echo '  -d, --dir    relative path to search for --tag, default root'
-    echo '                 is set by NB_DIR'
+    echo '  -d, --dir    relative path to search for --tag, default'
+    echo '                 root is set by NB_DIR'
     echo '  -f, --folder target directory where to put found notes'
+    echo '  -l, --list   display tagged notes'
     echo '  -r, --repo   sets root directory'
     echo '  -t, --tag    search recursively for given tag'
     echo '  -h, --help   shows this page'
