@@ -250,9 +250,9 @@ nbquick() {
         elif [[ "$1" == "open" ]] || [[ "$1" == "show" ]]; then
             nb peek ${QUICK_NOTES_PATH}
         elif [[ "$1" == "edit" ]] || [[ "$1" == "last" ]] || [[ "$1" == "e" ]]; then
-            nb edit "$(nb list --no-index --paths home:quick/ -1 | head -qn1)"
+            nb edit "$(nb list --no-index --paths home:quick/ -1 | head -qn1)" 2>/dev/null
         elif [[ "$1" == del* ]] || [[ "$1" == "rm" ]]; then
-            nb delete "$(nb list --no-index --paths home:quick/ -1 | head -qn1)"
+            nb delete "$(nb list --no-index --paths home:quick/ -1 | head -qn1)" 2>/dev/null
         fi
     fi
 }
@@ -376,7 +376,7 @@ nbsort() {
 
                 # remove first line of file, jump blank line & get 3rd line
                 sed '1d' $i | sed -e '0,/^[[:space:]]*$/{//d}' | sed '1s/^/# /' > /tmp/$filename.tmp
-                title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%\._-~ã,;ôâêáóh*&àéíõç]//g'`
+                title=`head -n 1 /tmp/$filename.tmp | sed -e 's/\(.*\)/\L\1/' -e 's/[$#%*&\._-~ã,;ôâêáó*&àéíõç]//g'`
                 title=$prefix$suffix"${title// /_}".md
 
                 # move file to specified location
