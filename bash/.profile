@@ -52,6 +52,6 @@ export NO_AT_BRIDGE=1
 export TERM="xterm-256color"
 export FZF_DEFAULT_COMMAND='git ls-files --cached --others --exclude-standard | fd $FD_OPTIONS'
 export FZF_DEFAULT_OPTS="--inline-info -m --bind='ctrl-y:execute-silent(echo {} | xclip -i -selection clipboard)+abort'"
-export QT_QPA_PLATFORMTHEME=
+export QT_QPA_PLATFORMTHEME=kde
 export SSH_ASKPASS=/usr/bin/ksshaskpass
 export NB_DIR=$HOME/Dropbox/Documents/workspace/notes
