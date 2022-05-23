@@ -289,7 +289,7 @@ set t_ut=
 set background=dark
 set encoding=utf-8
 
-colorscheme ron
+colorscheme default
 
 hi Normal ctermbg=NONE
 hi nonText ctermbg=NONE
