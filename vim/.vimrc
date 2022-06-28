@@ -46,7 +46,6 @@ set conceallevel=0
 set textwidth=0
 set wrapmargin=0
 set noswapfile
-set shortmess+=I
 set splitright
 
 " Make navigation more amenable to the long wrapping lines
