@@ -236,6 +236,7 @@ nnoremap <C-K> :Marks<CR>
 nnoremap <C-M>w :Windows<CR>
 nnoremap <C-H> :History:<CR>
 nnoremap <C-L> :Commits<CR>
+nnoremap <leader>f :Ag<CR>
 
 " Checklist toggle for markdown files
 nnoremap <leader>c :ChecklistToggleCheckbox<CR>
