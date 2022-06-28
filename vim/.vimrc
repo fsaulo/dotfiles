@@ -47,6 +47,7 @@ set textwidth=0
 set wrapmargin=0
 set noswapfile
 set splitright
+set nowrap
 
 " Make navigation more amenable to the long wrapping lines
 noremap <buffer> k gk
