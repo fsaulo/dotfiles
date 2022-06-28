@@ -343,6 +343,10 @@ hi ConflictMarkerEnd cterm=bold ctermfg=33
 hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
 hi ConflictMarkerSeparator cterm=bold ctermfg=35
 
+" Language specifics
+hi cDefine ctermfg=red
+hi cInclude ctermfg=red
+
 " Unicode to activate italic font type
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
