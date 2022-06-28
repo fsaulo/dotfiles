@@ -65,8 +65,6 @@ inoremap <buffer> <Up> <C-O>gk
 inoremap <buffer> <Down> <C-O>gj
 
 " Toggle/clear highlight search
-nnoremap <silent><C-k>k :set hlsearch!<CR>
-
 nnoremap <silent><leader><Space> :noh<CR><CR>
 
 " Edit/reload vimrc configuration file
