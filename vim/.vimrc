@@ -2,15 +2,19 @@
 
 " sections
 " --------
-" 1. [[general]]
-" 2. [[plugins]]
-" 3. [[setup]]
-" 4. [[theme]]
-" 5. [[editor]]
-" 6. [[scripts]]
+
+" =============
+" [[ general ]]
+" [[ plugins ]]
+" [[ setup   ]]
+" [[ theme   ]]
+" [[ editor  ]]
+" [[ scripts ]]
+" =============
 
 " general
 " -------
+
 " Reload when a file is changed from the outside
 set autoread
 set mouse=a
@@ -130,36 +134,36 @@ nnoremap "p :reg <bar> exec 'normal! "'.input('>').'p'<CR>
 
 " plugins
 " -------
+
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'djoshea/vim-autoread'
 Plugin 'xuxinx/vim-tabline'
 Plugin 'evansalter/vim-checklist'
-Plugin 'chikamichi/mediawiki.vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tomtom/tcomment_vim'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-fugitive'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'tpope/vim-obsession'
 Plugin 'preservim/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
-Plugin 'jmcantrell/vim-virtualenv'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'houtsnip/vim-emacscommandline'
 Plugin 'ton/vim-bufsurf'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'fsaulo/vim-airline'
 Plugin 'rhysd/conflict-marker.vim'
 Plugin 'vim-scripts/BufOnly.vim'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-obsession'
+Plugin 'fsaulo/vim-airline'
+Plugin 'fsaulo/vim-autoread'
 
 call vundle#end()
 
 " setup
 " -----
+
 " Enable filetype plugins
 filetype off
 filetype indent on
@@ -278,6 +282,7 @@ let g:conflict_marker_highlight_group = ''
 
 " theme
 " -----
+
 " Enable syntax highlighting
 set term=screen-256color
 set t_Co=256
@@ -291,16 +296,17 @@ set encoding=utf-8
 colorscheme default
 
 hi Normal ctermbg=NONE
+hi LineNr cterm=bold ctermfg=220
 hi nonText ctermbg=NONE
 hi Search ctermbg=darkblue ctermfg=white cterm=bold
 hi Visual ctermbg=darkblue ctermfg=yellow cterm=bold
 hi TabLineFill cterm=NONE
 hi StatusLine cterm=bold
+hi Comment cterm=NONE ctermfg=grey
 hi htmlItalic ctermfg=darkgrey
 hi htmlBold cterm=bold ctermfg=darkblue
 hi htmlH1 cterm=bold ctermfg=203
 hi Todo cterm=bold ctermfg=cyan ctermbg=NONE
-hi LineNr cterm=bold ctermfg=220
 hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
 hi ErrorMsg cterm=bold ctermfg=203 ctermbg=NONE
 hi Ignore cterm=NONE ctermfg=darkgrey ctermbg=NONE
@@ -352,6 +358,7 @@ let &t_ZR="\e[23m"
 
 " editor
 " ------
+
 " Be smart when using tabs
 set smarttab
 
@@ -379,6 +386,7 @@ set timeoutlen=5000 ttimeoutlen=50
 
 " scripts
 " -------
+
 " Do not close window when deleting a buffer
 command! Bclose call <SID>BufcloseCloseIt()
 function! <SID>BufcloseCloseIt()
