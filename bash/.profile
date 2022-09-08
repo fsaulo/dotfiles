@@ -32,6 +32,10 @@ if [ -f ~/.bash_scripts ]; then
 	source ~/.bash_scripts
 fi
 
+if [ -f ~/.bash_git ]; then
+	source ~/.bash_git
+fi
+
 eval `keychain -q --noask --eval id_ed25519`
 
 # local variables and assigments
