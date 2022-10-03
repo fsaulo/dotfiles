@@ -29,10 +29,11 @@ nmap <silent><leader>w :w!<CR>
 nmap <silent><leader>q :wq!<CR>
 nmap <silent><leader>x :qa!<CR>
 
-" Navigate between buffers
-nnoremap gb :buffers<CR>:buffer<Space>
-nnoremap <leader>B :bprevious<CR>
-nnoremap <leader>b :bnext<CR>
+" Navigate between buffers and tabs
+nnoremap ]b :bprevious<CR>
+nnoremap [b :bnext<CR>
+nnoremap ]t :tabprevious<CR>
+nnoremap [t :tabnext<CR>
 
 " Close all buffers except current
 nnoremap <silent><leader>o :BufOnly<CR>
