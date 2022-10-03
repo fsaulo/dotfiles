@@ -276,6 +276,9 @@ nnoremap <leader>gd :Gvdiffsplit!<CR>
 nnoremap gh :diffget //2<CR>:diffupdate<CR>
 nnoremap gl :diffget //3<CR>:diffupdate<CR>
 
+" Fugitive git overview
+nnoremap <silent><leader>gg :Git<CR>
+
 " Conflict marker related
 let g:conflict_marker_enable_mappings = 1
 let g:conflict_marker_enable_matchit = 0
@@ -383,7 +386,6 @@ set pastetoggle=<F2>
 " Longer leader timeout
 set timeout ttimeout
 set timeoutlen=5000 ttimeoutlen=50
-
 
 " scripts
 " -------
