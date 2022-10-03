@@ -39,23 +39,15 @@ fi
 eval `keychain -q --noask --eval id_ed25519`
 
 # local variables and assigments
-FD_OPTIONS="--type f -H --follow --exclude .git --exclude node_modules"
+XTENSA_LX106=".local/espressif/toolchain/xtensa-lx106-elf/bin"
 
 # user specific environment and startup programs
-export MYSQL=/home/felix/.local/share/jvr/jar/mysql-connector/mysql-connector-java-8.0.11.jar
-export PATH_TO_FX=/home/felix/.local/share/jvr/jar/javafx-sdk-13/lib/
-export ELECTRON_TRASH=gio trash
+export IDF_PATH=$HOME/.local/espressif/sdk/esp8266
 export GPG_TTY=$(tty)
 export EDITOR=/usr/bin/vimx
-export UECIDE=/home/felix/.uecide
-export M4PATH="/home/felix/.local/share/Circuit_macros:"
-export PATH=$HOME/.local/bin:$HOME/bin:$HOME/.local/opt/riscv/bin:$PATH
-export SQLITE=/home/felix/.local/share/jvr/jar/sqlite-connector/sqlite-jdbc-3.27.2.1.jar
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk/
 export NO_AT_BRIDGE=1
 export TERM="xterm-256color"
-export FZF_DEFAULT_COMMAND='git ls-files --cached --others --exclude-standard | fd $FD_OPTIONS'
-export FZF_DEFAULT_OPTS="--inline-info -m --bind='ctrl-y:execute-silent(echo {} | xclip -i -selection clipboard)+abort'"
 export QT_QPA_PLATFORMTHEME=kde
 export SSH_ASKPASS=/usr/bin/ksshaskpass
 export NB_DIR=$HOME/Dropbox/Documents/workspace/notes
+export PATH=$HOME/.local/bin:$HOME/bin:$HOME/$XTENSA_LX106:$PATH
