@@ -234,14 +234,13 @@ nmap gp <Plug>(buf-surf-back)
 nnoremap <leader>gd :Gvdiffsplit!<CR>
 nnoremap gh :diffget //2<CR>:diffupdate<CR>
 nnoremap gl :diffget //3<CR>:diffupdate<CR>
-
-" Fugitive git overview
 nnoremap <silent><leader>gg :Git<CR>
 
 " Conflict marker related
 let g:conflict_marker_enable_mappings = 1
 let g:conflict_marker_enable_matchit = 0
 let g:conflict_marker_highlight_group = ''
+let g:gitgutter_enabled = 0
 
 " theme
 " -----
