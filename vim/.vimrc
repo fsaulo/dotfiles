@@ -210,9 +210,6 @@ let g:fzf_colors =
   \ 'spinner': ['fg', 'Label'],
   \ 'header':  ['fg', 'Comment'] }
 
-" Fzf preview window hidden by default
-let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
-
 " Fzf mapping
 nnoremap <C-F> :Files<CR>
 nnoremap <C-J> :Buffers<CR>
@@ -221,6 +218,7 @@ nnoremap <C-M>w :Windows<CR>
 nnoremap <C-H> :History:<CR>
 nnoremap <C-L> :Commits<CR>
 nnoremap <leader>f :Ag<CR>
+nnoremap <leader>t :Tags <C-r><C-w><CR>
 
 " Checklist toggle for markdown files
 nnoremap <leader>c :ChecklistToggleCheckbox<CR>
