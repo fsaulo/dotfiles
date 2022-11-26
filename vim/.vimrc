@@ -272,8 +272,8 @@ hi Todo cterm=bold ctermfg=cyan ctermbg=NONE
 hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
 hi ErrorMsg cterm=bold ctermfg=203 ctermbg=NONE
 hi Ignore cterm=NONE ctermfg=darkgrey ctermbg=NONE
-hi Pmenu ctermfg=233 cterm=NONE ctermbg=133
-hi PmenuSel cterm=bold ctermfg=244 ctermbg=0
+hi Pmenu ctermfg=15 cterm=NONE ctermbg=133
+hi PmenuSel cterm=bold ctermfg=11 ctermbg=4
 hi PmenuSbar ctermbg=240
 hi PmenuThumb ctermbg=244
 hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
@@ -311,8 +311,8 @@ hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
 hi ConflictMarkerSeparator cterm=bold ctermfg=35
 
 " Language specifics
-hi cDefine ctermfg=red
-hi cInclude ctermfg=red
+hi cDefine ctermfg=red cterm=bold
+hi cInclude ctermfg=red cterm=bold
 
 " Unicode to activate italic font type
 let &t_ZH="\e[3m"
