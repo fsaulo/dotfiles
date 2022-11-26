@@ -194,6 +194,7 @@ let g:gutentags_project_root = ['Makefile', 'CMakeLists.txt']
 
 let g:fzf_layout = {'down': '30%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
+let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_colors =
 \ { 'fg':      ['fg', 'Normal'],
