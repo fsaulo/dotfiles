@@ -96,6 +96,11 @@ set novisualbell
 set t_vb=
 set tm=500
 
+if has('persistent_undo')
+    set undofile
+    set undodir=$HOME/.vim/undo
+endif
+
 " Enable bash alieses in non-interactive shell
 let $BASH_ENV = "~/.vim_bash_env"
 
