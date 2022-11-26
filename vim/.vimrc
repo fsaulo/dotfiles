@@ -222,26 +222,8 @@ nnoremap <leader>t :Tags <C-r><C-w><CR>
 
 " Checklist toggle for markdown files
 nnoremap <leader>c :ChecklistToggleCheckbox<CR>
-
-" Execute shell commands and dump in a new vim window
-nnoremap <leader>\ :Shell<Space>
-
-" Preview commands to compile and execute C singular file programs
-nnoremap <F5> :Shell gcc -o cout.lo -std=c99 -lm %<Space>
-nnoremap <F6> :Shell xclip -o -selection clipboard \| ./cout.lo<Space>
-nnoremap <F7> :Shell rm -f *.lo *.out<CR><C-W>c<CR>
-nnoremap <F8> :Shell cat % \| clipboard<CR><C-W>c<CR>
-
-" Map tagbar
-nnoremap <silent><leader>t :TagbarToggle<CR>
-
-" Gitgutter defaults
-let g:gitgutter_enabled = 0
-
-" Mag gitgutter toggle
+nnoremap <silent><F8> :TagbarToggle<CR>
 nnoremap <silent><leader>ht :GitGutterToggle<CR>
-
-" Toggle relative numbers
 nnoremap <silent><C-n> :call NumberToggle()<CR>
 
 " Map bufsurf
