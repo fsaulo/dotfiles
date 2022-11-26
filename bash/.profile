@@ -51,3 +51,5 @@ export QT_QPA_PLATFORMTHEME=kde
 export SSH_ASKPASS=/usr/bin/ksshaskpass
 export NB_DIR=$HOME/Dropbox/Documents/workspace/notes
 export PATH=$HOME/.local/bin:$HOME/bin:$HOME/$XTENSA_LX106:$PATH
+export ESPPORT=/dev/ttyUSB0
+export SSH_ASKPASS_REQUIRE=never
