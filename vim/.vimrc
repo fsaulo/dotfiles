@@ -15,12 +15,10 @@
 " general
 " -------
 
-" Reload when a file is changed from the outside
 set autoread
 set mouse=a
 set updatetime=10
-
-" Map leader key
+set tags=tags
 let mapleader = ","
 
 " Fast saving and quitting
