@@ -189,6 +189,8 @@ let g:vim_markdown_emphasis_multiline = 0
 let g:vim_markdown_frontmatter = 0
 let g:vim_markdown_strikethrough = 0
 let g:tex_conceal = ""
+let g:gutentags_enabled = 0
+let g:gutentags_project_root = ['Makefile', 'CMakeLists.txt']
 
 let g:fzf_layout = {'down': '30%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
