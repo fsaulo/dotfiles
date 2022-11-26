@@ -133,6 +133,8 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
 Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-autoread'
+Plugin 'fsaulo/vim-gutentags'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 
 call vundle#end()
 
