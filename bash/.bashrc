@@ -35,7 +35,9 @@ colors() {
 
 [ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
 
-source ~/.bash_git
+if [ -f ~/.bash_git ]; then
+    source ~/.bash_git
+fi
 
 # Change the window title of X terminals
 case ${TERM} in
