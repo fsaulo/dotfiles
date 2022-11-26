@@ -1,6 +1,7 @@
 # .bash_aliases [Saulo G. Felix]
 
 alias cp="cp -i"
+alias ll="ls -l"
 alias df='df -h'
 alias free='free -m'
 alias np='nano -w PKGBUILD'
@@ -60,3 +61,5 @@ alias gasific="cd /home/felix/Documents/Projects/gasific/; bash run.sh"
 alias mux="tmuxinator"
 alias clip="xsel -b"
 alias simulide="/home/felix/.local/opt/simulide/simulide*.AppImage & exit"
+alias srcidf="export IDF_PATH=${HOME}/.local/espressif/sdk/esp32; . ${IDF_PATH}/export.sh"
+alias srcconda="source ~/.bash_conda"
