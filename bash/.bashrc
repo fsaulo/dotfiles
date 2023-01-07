@@ -51,6 +51,9 @@ esac
 
 use_color=true
 
+# change keybindings for forward search
+bind "\C-t":forward-search-history
+
 # Set colorful PS1 only on colorful terminals.
 # dircolors --print-database uses its own built-in database
 # instead of using /etc/DIR_COLORS.  Try to use the external file
