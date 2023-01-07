@@ -258,13 +258,14 @@ set encoding=utf-8
 colorscheme default
 
 hi Normal ctermbg=NONE
-hi LineNr cterm=bold ctermfg=220
-hi nonText ctermbg=NONE
-hi Search ctermbg=darkblue ctermfg=white cterm=bold
-hi Visual ctermbg=darkblue ctermfg=yellow cterm=bold
+hi Directory cterm=bold ctermfg=81
+hi LineNr cterm=bold ctermfg=220 ctermbg=NONE
+hi Search ctermbg=NONE ctermfg=blue cterm=underline
+hi Special cterm=bold ctermfg=magenta
+hi CurSearch ctermbg=NONE cterm=reverse,bold
+hi Visual ctermbg=19 ctermfg=220 cterm=bold
 hi TabLineFill cterm=NONE
 hi StatusLine cterm=bold
-hi Comment cterm=NONE ctermfg=grey
 hi htmlItalic ctermfg=darkgrey
 hi htmlBold cterm=bold ctermfg=darkblue
 hi htmlH1 cterm=bold ctermfg=203
@@ -284,6 +285,7 @@ hi DiffText ctermbg=255 ctermfg=166 cterm=reverse,bold
 hi! link SignColumn LineNr
 hi! link ColorColumn ErrorMsg
 hi! link VertSplit StatusLine
+hi! link nonText Constant
 
 " Gitgutter color preferences
 hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
@@ -311,8 +313,12 @@ hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
 hi ConflictMarkerSeparator cterm=bold ctermfg=35
 
 " Language specifics
-hi cDefine ctermfg=red cterm=bold
-hi cInclude ctermfg=red cterm=bold
+hi Define ctermfg=red cterm=bold
+hi Include ctermfg=red cterm=bold
+hi Statement cterm=bold
+hi Comment cterm=NONE ctermfg=grey
+hi Type ctermfg=108 cterm=bold
+hi PreProc cterm=bold ctermfg=39
 
 " Unicode to activate italic font type
 let &t_ZH="\e[3m"
