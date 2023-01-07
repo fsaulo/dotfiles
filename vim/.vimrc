@@ -35,7 +35,7 @@ nnoremap ]t :tabprevious<CR>
 nnoremap [t :tabnext<CR>
 
 " Close all buffers except current
-nnoremap <silent><leader>o :BufOnly<CR>
+nnoremap <silent><leader>o :BufOnly<CR>:bnext<CR>
 
 set nocompatible
 set number
@@ -51,7 +51,7 @@ set textwidth=0
 set wrapmargin=0
 set noswapfile
 set splitright
-set nowrap
+set wrap
 
 " Make navigation more amenable to the long wrapping lines
 noremap <buffer> k gk
@@ -126,15 +126,13 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'houtsnip/vim-emacscommandline'
 Plugin 'ton/vim-bufsurf'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'rhysd/conflict-marker.vim'
-Plugin 'vim-scripts/BufOnly.vim'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
 Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-autoread'
 Plugin 'fsaulo/vim-gutentags'
-Plugin 'octol/vim-cpp-enhanced-highlight'
 
 call vundle#end()
 
