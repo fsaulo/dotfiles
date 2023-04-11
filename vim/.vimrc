@@ -318,6 +318,25 @@ hi Comment cterm=NONE ctermfg=grey
 hi Type ctermfg=108 cterm=bold
 hi PreProc cterm=bold ctermfg=39
 
+" FZF colors
+let g:fzf_layout = {'down': '30%'}
+let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
+let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_colors =
+\ { 'fg':      ['fg', 'Normal'],
+  \ 'bg':      ['bg', 'Normal'],
+  \ 'hl':      ['fg', 'Comment'],
+  \ 'fg+':     ['fg', 'Directory', 'Normal', 'Normal'],
+  \ 'bg+':     ['bg', 'CursorLine', 'Normal'],
+  \ 'hl+':     ['fg', 'Statement'],
+  \ 'info':    ['fg', 'PreProc'],
+  \ 'prompt':  ['fg', 'Conditional'],
+  \ 'pointer': ['fg', 'Exception'],
+  \ 'marker':  ['fg', 'Keyword'],
+  \ 'spinner': ['fg', 'Label'],
+  \ 'header':  ['fg', 'Comment'] }
+
 " Unicode to activate italic font type
 let &t_ZH="\e[3m"
 let &t_ZR="\e[23m"
