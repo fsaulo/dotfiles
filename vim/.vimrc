@@ -19,14 +19,17 @@ set autoread
 set mouse=a
 set updatetime=10
 set tags=tags
+set complete=.,w,b,u,t,U
 let mapleader = ","
 
 " Fast saving and quitting
-nmap <silent><leader>z :bd!<CR>
+nmap <silent><leader>z :bp<bar>sp<bar>bn<bar>bd!<CR>
 nmap <silent><leader>w :w!<CR>
 nmap <silent><leader>q :wq!<CR>
 nmap <silent><leader>x :qa!<CR>
+nmap <silent><leader>jq :%!jq<CR>
 nmap <silent><CR> o<Esc>
+nmap <leader>r :e! %<CR>
 
 " Navigate between buffers and tabs
 nnoremap ]b :bprevious<CR>
@@ -45,7 +48,7 @@ set noshowmode
 set showcmd
 set showtabline=2
 set directory^=$HOME/.vim/tmp//
-set clipboard=unnamedplus
+set clipboard=unnamedplus,exclude:cons\\\\|linux
 set conceallevel=0
 set textwidth=0
 set wrapmargin=0
@@ -73,6 +76,7 @@ nnoremap <silent><leader><Space> :noh<CR><CR>
 nnoremap <silent><leader>e :e $MYVIMRC<CR>
 nnoremap <silent><leader>v :source $MYVIMRC<CR>"
 nnoremap <silent><C-p> :pu<CR>
+vnoremap <silent><leader>p "_dP<CR>
 
 " Search and replace word under cursor
 nnoremap <leader>s :%s/\<<C-r><C-w>\>/
@@ -131,7 +135,6 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
 Plugin 'fsaulo/vim-airline'
-Plugin 'fsaulo/vim-autoread'
 Plugin 'fsaulo/vim-gutentags'
 
 call vundle#end()
@@ -189,24 +192,6 @@ let g:vim_markdown_strikethrough = 0
 let g:tex_conceal = ""
 let g:gutentags_enabled = 0
 let g:gutentags_project_root = ['Makefile', 'CMakeLists.txt']
-
-let g:fzf_layout = {'down': '30%'}
-let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
-let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
-let g:fzf_history_dir = '~/.local/share/fzf-history'
-let g:fzf_colors =
-\ { 'fg':      ['fg', 'Normal'],
-  \ 'bg':      ['bg', 'Normal'],
-  \ 'hl':      ['fg', 'Comment'],
-  \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':     ['fg', 'Statement'],
-  \ 'info':    ['fg', 'PreProc'],
-  \ 'prompt':  ['fg', 'Conditional'],
-  \ 'pointer': ['fg', 'Exception'],
-  \ 'marker':  ['fg', 'Keyword'],
-  \ 'spinner': ['fg', 'Label'],
-  \ 'header':  ['fg', 'Comment'] }
 
 " Fzf mapping
 nnoremap <C-F> :Files<CR>
