@@ -77,11 +77,11 @@ if ${use_color} ; then
 			eval $(dircolors -b /etc/DIR_COLORS)
 		fi
 	fi
-
+    
 	if [[ ${EUID} == 0 ]] ; then
-		PS1='\[\033[01;31m\][\h:\[\033[36m\] \W\[\033[01;31m\]$(__git_ps1 " (%s)")\[\033[36m\]]\$\[\033[00m\] ' 
+        PS1='\[\033[01;31m\][\h:\[\033[36m\] \W\[\033[01;31m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[36m\]]\$\[\033[00m\] ' 
 	else
-		PS1='\[\033[01;32m\]\u@\h:\[\033[37m\] \W\[\033[01;34m\]$(__git_ps1 " (%s)")\[\033[32m\]\$\[\033[00m\] '
+        PS1='\[\033[01;32m\]\u@\h:\[\033[37m\] \W\[\033[01;34m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[32m\]\$\[\033[00m\] '
 	fi
 
 	alias ls='ls --color=auto'
