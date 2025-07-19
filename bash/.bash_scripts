@@ -6,30 +6,42 @@
 # A shortcut function that simplifies usage of xclip.
 # Accepts input from either stdin (pipe), or params.
 cb() {
-  local _scs_col="\e[01;34m"; local _wrn_col='\e[01;31m'; local _trn_col='\e[01;33m'
-  # Check that xclip is installed.
-  if ! type xclip > /dev/null 2>&1; then
-    echo -e "$_wrn_col""You must have the 'xclip' program installed.\e[0m"
+  local _scs_col="\e[01;34m"
+  local _wrn_col='\e[01;31m'
+  local _trn_col='\e[01;33m'
+  
+  # Determine the clipboard command based on the session type
+  local clipboard_command
+  if [[ "$XDG_SESSION_TYPE" == "wayland" ]]; then
+    clipboard_command="wl-copy"
+  else
+    clipboard_command="xclip -selection clipboard"
+  fi
+  
+  # Check that the appropriate clipboard command is available
+  if ! type $clipboard_command > /dev/null 2>&1; then
+    echo -e "$_wrn_col""You must have '$clipboard_command' program installed.\e[0m"
   # Check user is not root (root doesn't have access to user xorg server)
   elif [[ "$USER" == "root" ]]; then
     echo -e "$_wrn_col""Must be regular user (not root) to copy a file to the clipboard.\e[0m"
   else
     # If no tty, data should be available on stdin
-    if ! [[ "$( tty )" == /dev/* ]]; then
+    if ! [[ "$(tty)" == /dev/* ]]; then
       input="$(< /dev/stdin)"
     # Else, fetch input from params
     else
       input="$*"
     fi
+    
     if [ -z "$input" ]; then  # If no input, print usage message.
       echo "Copies a string to the clipboard."
       echo "Usage: cb <string>"
       echo "       echo <string> | cb"
     else
       # Copy input to clipboard
-      echo -n "$input" | xclip -selection c
+      echo -n "$input" | $clipboard_command
       # Truncate text for status
-      if [ ${#input} -gt 80 ]; then input="$(echo $input | cut -c1-80)$_trn_col...\e[0m"; fi
+      if [ ${#input} -gt 80 ]; then input="$(echo "$input" | cut -c1-80)$_trn_col...\e[0m"; fi
       # Print status.
       echo -e "$_scs_col""Copied to clipboard:\e[0m $input"
     fi
@@ -396,3 +408,8 @@ nbsort() {
 duckit() {
     w3m https://lite.duckduckgo.com/lite/?q="$@"
 }
+
+function set_rosmaster() {
+    export ROS_MASTER_URI=http://"$1":11311 ROS_IPV6=on ROS_HOSTNAME=$(hostname)
+}
+export -f set_rosmaster
