@@ -75,11 +75,11 @@ inoremap <buffer> <Down> <C-O>gj
 nnoremap <silent><leader><Space> :noh<CR><CR>
 nnoremap <silent><leader>e :e $MYVIMRC<CR>
 nnoremap <silent><leader>v :source $MYVIMRC<CR>"
-nnoremap <silent><C-p> :pu<CR>
+nnoremap <silent>P :pu<CR>
 vnoremap <silent><leader>p "_dP<CR>
 
 " Search and replace word under cursor
-nnoremap <leader>s :%s/\<<C-r><C-w>\>/
+nnoremap <leader>s :%,.s/\<<C-r><C-w>\>/
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>")
 vnoremap <C-r> "0y<Esc>:%s/<C-r>0//g<left><left>
 
@@ -136,6 +136,9 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
 Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-gutentags'
+Plugin 'peterhoeg/vim-qml'
+Plugin 'jasonccox/vim-wayland-clipboard'
+
 
 call vundle#end()
 
@@ -166,8 +169,8 @@ let g:airline_section_warning = ""
 let g:airline_detect_paste = 1
 let g:airline_left_sep = '⁝'
 let g:airline_right_sep = ''
-let g:airline_left_alt_sep = '|'
-let g:airline_right_alt_sep = ''
+let g:airline_left_alt_sep = '⧽'
+let g:airline_right_alt_sep = '⧼'
 let g:airline_symbols.colnr = '㏇'
 let g:airline_symbols.crypk = '🔒'
 let g:airline_symbols.linenr = '☰ '
@@ -177,7 +180,7 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = ' ?'
 let g:airline_symbols.whitespace = '☲'
 let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = '☠ '
+let g:airline_symbols.readonly = '⨂ '
 let g:airline_symbols.dirty = ' •'
 
 " Markdown configuration (related with vim-markdown plugin)
@@ -194,7 +197,8 @@ let g:gutentags_enabled = 0
 let g:gutentags_project_root = ['Makefile', 'CMakeLists.txt']
 
 " Fzf mapping
-nnoremap <C-F> :Files<CR>
+nnoremap <C-P> :Files<CR>
+nnoremap <C-F> :Rg<CR>
 nnoremap <C-J> :Buffers<CR>
 nnoremap <C-K> :Marks<CR>
 nnoremap <C-M>w :Windows<CR>
@@ -343,7 +347,6 @@ set si
 
 " Copy and paste keymap
 inoremap <C-q> <ESC>"+pa
-vnoremap <C-c> "+y
 vnoremap <C-d> "+d
 
 " Enable pastetoggle
@@ -377,14 +380,18 @@ endfunction
 " Toggle line number relative with start point or with
 " line number or absolute number lines
 function! NumberToggle()
-    if(&number == 1)
+    if &number && &relativenumber
+        set norelativenumber
+    elseif &number
+        set nonumber
+    else
         set number
-        set relativenumber!
-	elseif (&relativenumber==1)
         set relativenumber
-        set number!
-  	else
-        set norelativenumber!
-        set number
     endif
 endfunction
+
+" Restore the file cursor position
+autocmd BufReadPost *
+  \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+  \ |   exe "normal! g`\""
+  \ | endif
