@@ -48,7 +48,7 @@ set noshowmode
 set showcmd
 set showtabline=2
 set directory^=$HOME/.vim/tmp//
-set clipboard=unnamedplus,exclude:cons\\\\|linux
+set clipboard=unnamedplus
 set conceallevel=0
 set textwidth=0
 set wrapmargin=0
@@ -75,7 +75,8 @@ inoremap <buffer> <Down> <C-O>gj
 nnoremap <silent><leader><Space> :noh<CR><CR>
 nnoremap <silent><leader>e :e $MYVIMRC<CR>
 nnoremap <silent><leader>v :source $MYVIMRC<CR>"
-nnoremap <silent>P :pu<CR>
+nnoremap <silent>p :pu<CR>
+nnoremap <silent>P :pu!<CR>
 vnoremap <silent><leader>p "_dP<CR>
 
 " Search and replace word under cursor
@@ -204,7 +205,7 @@ nnoremap <C-K> :Marks<CR>
 nnoremap <C-M>w :Windows<CR>
 nnoremap <C-H> :History:<CR>
 nnoremap <C-L> :Commits<CR>
-nnoremap <leader>f :Ag<CR>
+nnoremap <C-G> :GFiles?<CR>
 nnoremap <leader>t :Tags <C-r><C-w><CR>
 
 " Checklist toggle for markdown files
@@ -228,6 +229,7 @@ let g:conflict_marker_enable_mappings = 1
 let g:conflict_marker_enable_matchit = 0
 let g:conflict_marker_highlight_group = ''
 let g:gitgutter_enabled = 0
+let g:wayland_clipboard_unnamedplus = 1
 
 " theme
 " -----

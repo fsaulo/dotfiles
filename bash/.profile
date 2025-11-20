@@ -43,8 +43,8 @@ XTENSA_LX106=".local/espressif/toolchain/xtensa-lx106-elf/bin"
 
 # user specific environment and startup programs
 export GPG_TTY=$(tty)
-export EDITOR=/usr/bin/vimx
-export VISUAL=/usr/bin/vimx
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
 export NO_AT_BRIDGE=1
 export TERM="xterm-256color"
 export QT_QPA_PLATFORMTHEME=kde

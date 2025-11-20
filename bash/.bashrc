@@ -97,10 +97,9 @@ else
 		PS1='\u@\h \w \$ '
 	fi
 fi
-
 unset use_color safe_term match_lhs sh
-
 xhost +local:root > /dev/null 2>&1
+
 complete -cf sudo
 
 # Bash won't get SIGWINCH if another process is in the foreground.
@@ -135,3 +134,4 @@ ex ()
     echo "'$1' is not a valid file"
   fi
 }
+
