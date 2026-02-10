@@ -36,8 +36,6 @@ if [ -f ~/.bash_git ]; then
 	source ~/.bash_git
 fi
 
-eval `keychain -q --noask --eval id_ed25519`
-
 # local variables and assigments
 XTENSA_LX106=".local/espressif/toolchain/xtensa-lx106-elf/bin"
 
