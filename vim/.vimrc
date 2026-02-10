@@ -75,8 +75,6 @@ inoremap <buffer> <Down> <C-O>gj
 nnoremap <silent><leader><Space> :noh<CR><CR>
 nnoremap <silent><leader>e :e $MYVIMRC<CR>
 nnoremap <silent><leader>v :source $MYVIMRC<CR>"
-nnoremap <silent>p :pu<CR>
-nnoremap <silent>P :pu!<CR>
 vnoremap <silent><leader>p "_dP<CR>
 
 " Search and replace word under cursor
@@ -349,7 +347,6 @@ set si
 
 " Copy and paste keymap
 inoremap <C-q> <ESC>"+pa
-vnoremap <C-d> "+d
 
 " Enable pastetoggle
 set pastetoggle=<F2>
