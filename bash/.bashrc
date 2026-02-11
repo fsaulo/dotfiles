@@ -88,12 +88,6 @@ if ${use_color} ; then
         PS1='\[\e[32m\]\u@\h:\[\e[37m\] \W\[\e[34m\]$(__git_ps1 " (%s)")\[\e[32m\]$\[\e[0m\] '
     fi
     
-	# if [[ ${EUID} == 0 ]] ; then
-    #     PS1='\[\033[01;31m\][\h:\[\033[36m\] \W\[\033[01;31m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[36m\]]\$\[\033[00m\] ' 
-	# else
-    #     PS1='\[\033[01;32m\]\u@\h:\[\033[37m\] \W\[\033[01;34m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[32m\]\$\[\033[00m\] '
-	# fi
-
 	alias ls='ls --color=auto'
 	alias grep='grep --colour=auto'
 	alias egrep='egrep --colour=auto'
