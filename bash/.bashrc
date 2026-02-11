@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 # .bashrc [Saulo G. Felix]
 
 # source for bash environment variables, alias and scripts
@@ -24,7 +26,9 @@ colors() {
 			vals="${fgc:+$fgc;}${bgc}"
 			vals=${vals%%;}
 
-			seq0="${vals:+\e[${vals}m}"
+            esc_seq="\e[${vals}m"
+            seq0="${vals:+$esc_seq}"
+
 			printf "  %-9s" "${seq0:-(default)}"
 			printf " ${seq0}TEXT\e[m"
 			printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
@@ -77,12 +81,18 @@ if ${use_color} ; then
 			eval $(dircolors -b /etc/DIR_COLORS)
 		fi
 	fi
+
+    if [[ ${EUID} == 0 ]]; then
+        PS1='\[\e[31m\][\h:\[\e[37m\] \W\[\e[34m\]$(__git_ps1 " (%s)")\[\e[31m\]]#\[\e[0m\] '
+    else
+        PS1='\[\e[32m\]\u@\h:\[\e[37m\] \W\[\e[34m\]$(__git_ps1 " (%s)")\[\e[32m\]$\[\e[0m\] '
+    fi
     
-	if [[ ${EUID} == 0 ]] ; then
-        PS1='\[\033[01;31m\][\h:\[\033[36m\] \W\[\033[01;31m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[36m\]]\$\[\033[00m\] ' 
-	else
-        PS1='\[\033[01;32m\]\u@\h:\[\033[37m\] \W\[\033[01;34m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[32m\]\$\[\033[00m\] '
-	fi
+	# if [[ ${EUID} == 0 ]] ; then
+    #     PS1='\[\033[01;31m\][\h:\[\033[36m\] \W\[\033[01;31m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[36m\]]\$\[\033[00m\] ' 
+	# else
+    #     PS1='\[\033[01;32m\]\u@\h:\[\033[37m\] \W\[\033[01;34m\]$(if [[ -z $(git config prompt.ignore) ]]; then __git_ps1 " (%s)"; fi)\[\033[32m\]\$\[\033[00m\] '
+	# fi
 
 	alias ls='ls --color=auto'
 	alias grep='grep --colour=auto'
