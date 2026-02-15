@@ -135,15 +135,22 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
 Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-gutentags'
-Plugin 'peterhoeg/vim-qml'
 Plugin 'jasonccox/vim-wayland-clipboard'
 Plugin 'moll/vim-bbye'
-
 
 call vundle#end()
 
 " setup
 " -----
+
+" Integrate KClipper D-Bus service
+let g:wayland_clipboard_copy_command = 'qdbus6'
+let g:wayland_clipboard_paste_command = 'qdbus6'
+
+let g:wayland_clipboard_copy_args = [
+    'org.kde.klipper', '/klipper', 'setClipboardContents']
+let g:wayland_clipboard_paste_args = [
+    'org.kde.klipper', '/klipper', 'getClipboardContents']
 
 " Enable filetype plugins
 filetype off
