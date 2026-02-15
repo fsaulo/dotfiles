@@ -303,20 +303,26 @@ nbrepo() {
 
 # Automatically change the current working directory to the last 
 # visited one after ranger quits.
-function ranger-cd {
-    local IFS=$'\t\n'
-    local tempfile="$(mktemp -t tmp.XXXXXX)"
-    local ranger_cmd=(
-        command
-        ranger
-        --cmd="map Q chain shell echo %d > "$tempfile"; quitall"
-    )
+ranger_cd() {
+    local tmp
+    tmp="$(mktemp -t ranger_cd.XXXXXX)" || return
 
-    ${ranger_cmd[@]} "$@"
-    if [[ -f "$tempfile" ]] && [[ "$(cat -- "$tempfile")" != "$(echo -n `pwd`)" ]]; then
-        cd -- "$(cat "$tempfile")" || return
+    command ranger \
+        --choosedir="$tmp" \
+        --cmd='map Q quit' \
+        "$@"
+
+    local status=$?
+
+    # Only cd if ranger exited via Q (we detect via file content change)
+    if [[ -s "$tmp" ]]; then
+        local dir
+        dir="$(<"$tmp")"
+        [[ -d "$dir" ]] && cd -- "$dir"
     fi
-    command rm -f -- "$tempfile" 2>/dev/null
+
+    rm -f -- "$tmp"
+    return $status
 }
 
 nbsort_help() {
