@@ -137,6 +137,7 @@ Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-gutentags'
 Plugin 'peterhoeg/vim-qml'
 Plugin 'jasonccox/vim-wayland-clipboard'
+Plugin 'moll/vim-bbye'
 
 
 call vundle#end()
@@ -228,6 +229,12 @@ let g:conflict_marker_enable_matchit = 0
 let g:conflict_marker_highlight_group = ''
 let g:gitgutter_enabled = 0
 let g:wayland_clipboard_unnamedplus = 1
+
+" Fix problem with javadoc
+let g:java_ignore_markdown = 1
+
+" Delete buffer without closing windows (or altering windows layout)
+nnoremap <silent><leader>q :Bdelete<CR>
 
 " theme
 " -----
