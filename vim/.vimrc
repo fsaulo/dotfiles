@@ -116,41 +116,33 @@ nnoremap "p :reg <bar> exec 'normal! "'.input('>').'p'<CR>
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'xuxinx/vim-tabline'
-Plugin 'evansalter/vim-checklist'
-Plugin 'Raimondi/delimitMate'
-Plugin 'tomtom/tcomment_vim'
-Plugin 'godlygeek/tabular'
-Plugin 'plasticboy/vim-markdown'
+Plugin 'preservim/vim-markdown'
 Plugin 'preservim/tagbar'
 Plugin 'junegunn/fzf'
 Plugin 'junegunn/fzf.vim'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'houtsnip/vim-emacscommandline'
-Plugin 'ton/vim-bufsurf'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
-Plugin 'fsaulo/vim-airline'
-Plugin 'fsaulo/vim-gutentags'
 Plugin 'jasonccox/vim-wayland-clipboard'
-Plugin 'moll/vim-bbye'
+Plugin 'fsaulo/vim-airline'
+Plugin 'fsaulo/vim-airline-themes'
+Plugin 'fsaulo/vim-checklist'
+Plugin 'fsaulo/vim-delimitmate'
+Plugin 'fsaulo/vim-tabular'
+Plugin 'fsaulo/vim-gutentags'
+Plugin 'fsaulo/vim-tcomment'
+Plugin 'fsaulo/vim-emacscommandline'
+Plugin 'fsaulo/vim-bbye'
 
 call vundle#end()
 
 " setup
 " -----
-
-" Integrate KClipper D-Bus service
 let g:wayland_clipboard_copy_command = 'qdbus6'
 let g:wayland_clipboard_paste_command = 'qdbus6'
-
-let g:wayland_clipboard_copy_args = [
-    'org.kde.klipper', '/klipper', 'setClipboardContents']
-let g:wayland_clipboard_paste_args = [
-    'org.kde.klipper', '/klipper', 'getClipboardContents']
+let g:wayland_clipboard_copy_args = ['org.kde.klipper', '/klipper', 'setClipboardContents']
+let g:wayland_clipboard_paste_args = ['org.kde.klipper', '/klipper', 'getClipboardContents']
 
 " Enable filetype plugins
 filetype off
@@ -179,7 +171,6 @@ let g:airline_right_sep = ''
 let g:airline_left_alt_sep = '⧽'
 let g:airline_right_alt_sep = '⧼'
 let g:airline_symbols.colnr = '㏇'
-let g:airline_symbols.crypk = '🔒'
 let g:airline_symbols.linenr = '☰ '
 let g:airline_symbols.maxlinenr = ' ㏑'
 let g:airline_symbols.paste = 'PASTE'
@@ -187,7 +178,6 @@ let g:airline_symbols.spell = 'Ꞩ'
 let g:airline_symbols.notexists = ' ?'
 let g:airline_symbols.whitespace = '☲'
 let g:airline_symbols.branch = ''
-let g:airline_symbols.readonly = '⨂ '
 let g:airline_symbols.dirty = ' •'
 
 " Markdown configuration (related with vim-markdown plugin)
@@ -371,24 +361,6 @@ set timeoutlen=5000 ttimeoutlen=50
 
 " scripts
 " -------
-
-" Do not close window when deleting a buffer
-command! Bclose call <SID>BufcloseCloseIt()
-function! <SID>BufcloseCloseIt()
-    let l:currentBufNum = bufnr("%")
-    let l:alternateBufNum = bufnr(""")
-    if buflisted(l:alternateBufNum)
-        buffer #
-    else
-        bnext
-    endif
-    if bufnr("%") == l:currentBufNum
-        new
-    endif
-    if buflisted(l:currentBufNum)
-        execute("bdelete! ".l:currentBufNum)
-    endif
-endfunction
 
 " Toggle line number relative with start point or with
 " line number or absolute number lines
