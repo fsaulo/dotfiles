@@ -124,7 +124,6 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-obsession'
-Plugin 'jasonccox/vim-wayland-clipboard'
 Plugin 'fsaulo/vim-airline'
 Plugin 'fsaulo/vim-airline-themes'
 Plugin 'fsaulo/vim-checklist'
@@ -139,10 +138,6 @@ call vundle#end()
 
 " setup
 " -----
-let g:wayland_clipboard_copy_command = 'qdbus6'
-let g:wayland_clipboard_paste_command = 'qdbus6'
-let g:wayland_clipboard_copy_args = ['org.kde.klipper', '/klipper', 'setClipboardContents']
-let g:wayland_clipboard_paste_args = ['org.kde.klipper', '/klipper', 'getClipboardContents']
 
 " Enable filetype plugins
 filetype off
