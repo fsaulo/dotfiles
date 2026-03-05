@@ -48,7 +48,7 @@ set noshowmode
 set showcmd
 set showtabline=2
 set directory^=$HOME/.vim/tmp//
-set clipboard=unnamedplus
+set clipboard=unnamed,unnamedplus
 set conceallevel=0
 set textwidth=0
 set wrapmargin=0
@@ -220,7 +220,6 @@ let g:conflict_marker_enable_mappings = 1
 let g:conflict_marker_enable_matchit = 0
 let g:conflict_marker_highlight_group = ''
 let g:gitgutter_enabled = 0
-let g:wayland_clipboard_unnamedplus = 1
 
 " Fix problem with javadoc
 let g:java_ignore_markdown = 1
