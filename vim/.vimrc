@@ -226,7 +226,7 @@ let g:gitgutter_enabled = 0
 let g:java_ignore_markdown = 1
 
 " Delete buffer without closing windows (or altering windows layout)
-nnoremap <silent><leader>q :Bdelete<CR>
+nnoremap <silent><leader>d :Bdelete<CR>
 
 " theme
 " -----
