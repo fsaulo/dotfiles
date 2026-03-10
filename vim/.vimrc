@@ -151,7 +151,8 @@ endif
 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#tabline#formatter = 'default'
+let g:airline#extensions#tabline#formatter = "default"
+let g:airline#extensions#obsession#indicator_text = "●"
 let g:airline_theme="monochrome"
 let g:airline_inactive_alt_sep = 1
 let g:airline_skip_empty_sections = 1
