@@ -116,6 +116,7 @@ nnoremap "p :reg <bar> exec 'normal! "'.input('>').'p'<CR>
 call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
+
 Plugin 'preservim/vim-markdown'
 Plugin 'preservim/tagbar'
 Plugin 'junegunn/fzf'
@@ -147,34 +148,33 @@ filetype plugin on
 " Change airline default symbols
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#show_close_button = 0
+    let g:airline#extensions#tabline#formatter = "default"
+    let g:airline#extensions#obsession#indicator_text = "●"
+    let g:airline_theme="monochrome"
+    let g:airline_inactive_alt_sep = 1
+    let g:airline_skip_empty_sections = 1
+    let g:airline_powerline_fonts = 1
+    let g:airline_symbols_ascii = 0
+    let g:airline_remove_padding = 1
+    let g:airline_section_error = ""
+    let g:airline_section_warning = ""
+    let g:airline_detect_paste = 1
+    let g:airline_left_sep = "⁝"
+    let g:airline_right_sep = ""
+    let g:airline_left_alt_sep = "⧽"
+    let g:airline_right_alt_sep = "⧼"
+    let g:airline_symbols.colnr = "㏇:"
+    let g:airline_symbols.linenr = " ㏑:"
+    let g:airline_symbols.maxlinenr = " "
+    let g:airline_symbols.paste = "PASTE"
+    let g:airline_symbols.spell = "Ꞩ"
+    let g:airline_symbols.notexists = " ?"
+    let g:airline_symbols.whitespace = "☲"
+    let g:airline_symbols.branch = ""
+    let g:airline_symbols.dirty = ' •'
 endif
-
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#tabline#formatter = "default"
-let g:airline#extensions#obsession#indicator_text = "●"
-let g:airline_theme="monochrome"
-let g:airline_inactive_alt_sep = 1
-let g:airline_skip_empty_sections = 1
-let g:airline_powerline_fonts = 1
-let g:airline_symbols_ascii = 0
-let g:airline_remove_padding = 1
-let g:airline_section_error = ""
-let g:airline_section_warning = ""
-let g:airline_detect_paste = 1
-let g:airline_left_sep = "⁝"
-let g:airline_right_sep = ""
-let g:airline_left_alt_sep = "⧽"
-let g:airline_right_alt_sep = "⧼"
-let g:airline_symbols.colnr = "㏇:"
-let g:airline_symbols.linenr = " ㏑:"
-let g:airline_symbols.maxlinenr = " "
-let g:airline_symbols.paste = "PASTE"
-let g:airline_symbols.spell = "Ꞩ"
-let g:airline_symbols.notexists = " ?"
-let g:airline_symbols.whitespace = "☲"
-let g:airline_symbols.branch = ""
-let g:airline_symbols.dirty = ' •'
 
 " Markdown configuration (related with vim-markdown plugin)
 let g:vim_markdown_folding_disabled = 1
@@ -186,6 +186,7 @@ let g:vim_markdown_emphasis_multiline = 0
 let g:vim_markdown_frontmatter = 0
 let g:vim_markdown_strikethrough = 0
 let g:tex_conceal = ""
+
 let g:gutentags_enabled = 0
 let g:gutentags_project_root = ['Makefile', 'CMakeLists.txt']
 
@@ -222,6 +223,9 @@ let g:conflict_marker_enable_matchit = 0
 let g:conflict_marker_highlight_group = ''
 let g:gitgutter_enabled = 0
 
+" Wayland clipboard
+let g:wayland_clipboard_unnamedplus = 1
+
 " Fix problem with javadoc
 let g:java_ignore_markdown = 1
 
@@ -241,72 +245,84 @@ set t_ut=
 set background=dark
 set encoding=utf-8
 
+" Default colorscheme
+function! s:colors_default() abort
+    hi Normal ctermbg=NONE
+    hi Directory cterm=bold ctermfg=81
+    hi LineNr cterm=bold ctermfg=220 ctermbg=NONE
+    hi Search ctermbg=NONE ctermfg=blue cterm=underline
+    hi Special cterm=bold ctermfg=magenta
+    hi CurSearch ctermbg=NONE cterm=reverse,bold
+    hi Visual ctermbg=19 ctermfg=220 cterm=bold
+    hi TabLineFill cterm=NONE
+    hi StatusLine cterm=bold
+
+    hi Todo cterm=bold ctermfg=cyan ctermbg=NONE
+    hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
+    hi ErrorMsg cterm=bold ctermfg=203 ctermbg=NONE
+    hi Ignore cterm=NONE ctermfg=darkgrey ctermbg=NONE
+    hi Pmenu ctermfg=15 cterm=NONE ctermbg=133
+    hi PmenuSel cterm=bold ctermfg=11 ctermbg=4
+    hi PmenuSbar ctermbg=240
+    hi PmenuThumb ctermbg=244
+    hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
+    hi DiffChange ctermbg=232 ctermfg=212 cterm=reverse
+    hi DiffDelete ctermbg=232 ctermfg=203 cterm=reverse
+    hi DiffText ctermbg=255 ctermfg=166 cterm=reverse,bold
+
+    hi htmlItalic ctermfg=darkgrey
+    hi htmlBold cterm=bold ctermfg=darkblue
+    hi htmlH1 cterm=bold ctermfg=203
+
+    hi! link SignColumn LineNr
+    hi! link ColorColumn ErrorMsg
+    hi! link VertSplit StatusLine
+    hi! link nonText Constant
+
+    hi Define ctermfg=red cterm=bold
+    hi Include ctermfg=red cterm=bold
+    hi Statement cterm=bold
+    hi Comment cterm=NONE ctermfg=grey
+    hi Type ctermfg=108 cterm=bold
+    hi PreProc cterm=bold ctermfg=39
+endfunction
+
+augroup vimrc
+  autocmd ColorScheme * call s:colors_default()
+augroup END
+
 colorscheme default
 
-hi Normal ctermbg=NONE
-hi Directory cterm=bold ctermfg=81
-hi LineNr cterm=bold ctermfg=220 ctermbg=NONE
-hi Search ctermbg=NONE ctermfg=blue cterm=underline
-hi Special cterm=bold ctermfg=magenta
-hi CurSearch ctermbg=NONE cterm=reverse,bold
-hi Visual ctermbg=19 ctermfg=220 cterm=bold
-hi TabLineFill cterm=NONE
-hi StatusLine cterm=bold
-hi htmlItalic ctermfg=darkgrey
-hi htmlBold cterm=bold ctermfg=darkblue
-hi htmlH1 cterm=bold ctermfg=203
-hi Todo cterm=bold ctermfg=cyan ctermbg=NONE
-hi Error cterm=underline,bold ctermbg=NONE ctermfg=203
-hi ErrorMsg cterm=bold ctermfg=203 ctermbg=NONE
-hi Ignore cterm=NONE ctermfg=darkgrey ctermbg=NONE
-hi Pmenu ctermfg=15 cterm=NONE ctermbg=133
-hi PmenuSel cterm=bold ctermfg=11 ctermbg=4
-hi PmenuSbar ctermbg=240
-hi PmenuThumb ctermbg=244
-hi DiffAdd ctermbg=255 ctermfg=108 cterm=reverse,bold
-hi DiffChange ctermbg=232 ctermfg=212 cterm=reverse
-hi DiffDelete ctermbg=232 ctermfg=203 cterm=reverse
-hi DiffText ctermbg=255 ctermfg=166 cterm=reverse,bold
+" GitGutter color preferences
+if hlexists('GitGutterAddLine')
+    hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
+    hi GitGutterChange cterm=bold ctermbg=NONE ctermfg=166
+    hi GitGutterDelete cterm=bold ctermbg=NONE ctermfg=203
+    hi GitGutterChangeDelete cterm=bold ctermbg=NONE ctermfg=202
 
-hi! link SignColumn LineNr
-hi! link ColorColumn ErrorMsg
-hi! link VertSplit StatusLine
-hi! link nonText Constant
+    hi! link GitGutterAddLine GitGutterAdd
+    hi! link GitGutterChangeLine GitGutterChange
+    hi! link GitGutterDeleteLine GitGutterDelete
+    hi! link GitGutterChangeDeleteLine GitGutterChangeDelete
+    hi! link GitGutterAddIntraLine GitGutterAdd
+    hi! link GitGutterAddInvisible GitGutterAdd
+    hi! link GitGutterChangeInvisible GitGutterChange
+    hi! link GitGutterDeleteInvisible GitGutterDelete
+    hi! link GitGutterChangeDeleteInvisible GitGutterChangeDelete
+    hi! link GitGutterDeleteIntraLine GitGutterDelete
+endif
 
-" Gitgutter color preferences
-hi GitGutterAdd cterm=bold ctermbg=NONE ctermfg=35
-hi GitGutterChange cterm=bold ctermbg=NONE ctermfg=166
-hi GitGutterDelete cterm=bold ctermbg=NONE ctermfg=203
-hi GitGutterChangeDelete cterm=bold ctermbg=NONE ctermfg=202
+" ConflictMarker color preferences
+if hlexists('ConflictMarkerBegin')
+    hi ConflictMarkerBegin cterm=bold ctermfg=35
+    hi ConflictMarkerOurs ctermbg=NONE
+    hi ConflictMarkerTheirs ctermbg=NONE
+    hi ConflictMarkerEnd cterm=bold ctermfg=33
+    hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
+    hi ConflictMarkerSeparator cterm=bold ctermfg=35
+endif
 
-hi! link GitGutterAddLine GitGutterAdd
-hi! link GitGutterChangeLine GitGutterChange
-hi! link GitGutterDeleteLine GitGutterDelete
-hi! link GitGutterChangeDeleteLine GitGutterChangeDelete
-hi! link GitGutterAddIntraLine GitGutterAdd
-hi! link GitGutterAddInvisible GitGutterAdd
-hi! link GitGutterChangeInvisible GitGutterChange
-hi! link GitGutterDeleteInvisible GitGutterDelete
-hi! link GitGutterChangeDeleteInvisible GitGutterChageDelete
-hi! link GitGutterDeleteIntraLine GitGutterDelete
-
-" Resolving conflicts highlighting
-hi ConflictMarkerBegin cterm=bold ctermfg=35
-hi ConflictMarkerOurs ctermbg=NONE
-hi ConflictMarkerTheirs ctermbg=NONE
-hi ConflictMarkerEnd cterm=bold ctermfg=33
-hi ConflictMarkerCommonAncestors cterm=bold ctermfg=226
-hi ConflictMarkerSeparator cterm=bold ctermfg=35
-
-" Language specifics
-hi Define ctermfg=red cterm=bold
-hi Include ctermfg=red cterm=bold
-hi Statement cterm=bold
-hi Comment cterm=NONE ctermfg=grey
-hi Type ctermfg=108 cterm=bold
-hi PreProc cterm=bold ctermfg=39
-
-" FZF colors
+" FZF setup
 let g:fzf_layout = {'down': '30%'}
 let g:fzf_action = {'ctrl-t': 'tab split', 'ctrl-x': 'split', 'ctrl-v':'vsplit'}
 let g:fzf_preview_window = ['right:50%:hidden:border-sharp', 'ctrl-h']
