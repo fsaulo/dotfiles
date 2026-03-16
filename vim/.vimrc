@@ -244,6 +244,8 @@ set guitablabel=%M\ %t
 set t_ut=
 set background=dark
 set encoding=utf-8
+set filetype=ignored
+set syntax=on
 
 " Default colorscheme
 function! s:colors_default() abort
@@ -292,6 +294,7 @@ augroup vimrc
 augroup END
 
 colorscheme default
+syntax enable
 
 " GitGutter color preferences
 if hlexists('GitGutterAddLine')
