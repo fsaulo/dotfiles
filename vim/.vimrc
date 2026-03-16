@@ -252,6 +252,8 @@ function! s:colors_default() abort
     hi Normal ctermbg=NONE
     hi Directory cterm=bold ctermfg=81
     hi LineNr cterm=bold ctermfg=220 ctermbg=NONE
+    hi LineNrAbove ctermfg=8 ctermbg=NONE
+    hi LineNrBelow ctermfg=8 ctermbg=NONE
     hi Search ctermbg=NONE ctermfg=blue cterm=underline
     hi Special cterm=bold ctermfg=magenta
     hi CurSearch ctermbg=NONE cterm=reverse,bold
