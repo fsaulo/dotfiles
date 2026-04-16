@@ -36,20 +36,13 @@ if [ -f ~/.bash_git ]; then
 	source ~/.bash_git
 fi
 
-# local variables and assigments
-XTENSA_LX106=".local/espressif/toolchain/xtensa-lx106-elf/bin"
-
 # user specific environment and startup programs
 export GPG_TTY=$(tty)
-export EDITOR=/usr/bin/vimx
-export VISUAL=/usr/bin/vimx
+export EDITOR=/usr/bin/vim
+export VISUAL=/usr/bin/vim
 export NO_AT_BRIDGE=1
 export TERM="xterm-256color"
 export QT_QPA_PLATFORMTHEME=kde
-export SSH_ASKPASS=/usr/bin/ksshaskpass
-export NB_DIR=$HOME/Dropbox/Documents/workspace/notes
-export PATH=$HOME/.local/bin:$HOME/bin:$HOME/$XTENSA_LX106:$PATH
 export ESPPORT=/dev/ttyUSB0
-export SSH_ASKPASS_REQUIRE=never
 export FZF_DEFAULT_COMMAND="fd --type f --exclude *.pyc --hidden --exclude .git"
 export MENUCONFIG_STYLE="monochrome"
