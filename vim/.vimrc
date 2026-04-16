@@ -384,10 +384,10 @@ function! NumberToggle()
     if &number && &relativenumber
         set norelativenumber
     elseif &number
-        set nonumber
-    else
         set number
         set relativenumber
+    else
+        set nonumber
     endif
 endfunction
 
