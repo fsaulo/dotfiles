@@ -48,7 +48,7 @@ set noshowmode
 set showcmd
 set showtabline=2
 set directory^=$HOME/.vim/tmp//
-set clipboard=unnamed,unnamedplus
+set clipboard=unnamedplus
 set conceallevel=0
 set textwidth=0
 set wrapmargin=0
@@ -244,7 +244,6 @@ set guitablabel=%M\ %t
 set t_ut=
 set background=dark
 set encoding=utf-8
-set filetype=ignored
 set syntax=on
 
 " Default colorscheme
